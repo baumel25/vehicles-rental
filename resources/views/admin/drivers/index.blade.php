@@ -8,9 +8,9 @@
             <h3 class="text-xl font-bold">Professional Drivers</h3>
             <p class="text-xs text-muted font-bold mt-2">Manage driver profiles, availability, and ratings</p>
         </div>
-        <button class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">
+        <a href="/admin/drivers/create" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">
             <i data-lucide="user-plus" class="icon-sm" style="margin-right: 0.5rem;"></i> Add Driver
-        </button>
+        </a>
     </div>
 
     <div class="table-container">
@@ -29,6 +29,7 @@
                 @php
                     $drivers = [
                         [
+                            'id' => 1,
                             'name' => 'John Doe',
                             'spec' => 'Luxury Sedans',
                             'exp' => '8 Yrs',
@@ -36,6 +37,7 @@
                             'status' => 'On Task',
                         ],
                         [
+                            'id' => 2,
                             'name' => 'Sarah Smith',
                             'spec' => 'Sports Bikes',
                             'exp' => '5 Yrs',
@@ -43,6 +45,7 @@
                             'status' => 'Available',
                         ],
                         [
+                            'id' => 3,
                             'name' => 'Michael Chen',
                             'spec' => 'VIP Escort',
                             'exp' => '12 Yrs',
@@ -50,6 +53,7 @@
                             'status' => 'Available',
                         ],
                         [
+                            'id' => 4,
                             'name' => 'Elena Rodriguez',
                             'spec' => 'City Touring',
                             'exp' => '7 Yrs',
@@ -77,12 +81,14 @@
                         </td>
                         <td>
                             <div class="flex gap-2">
-                                <button style="background: none; border: none; color: var(--primary); cursor: pointer;">
+                                <a href="/admin/drivers/{{ $driver['id'] }}" class="btn-info"
+                                    style="color: var(--primary);">
                                     <i data-lucide="eye" class="icon-sm"></i>
-                                </button>
-                                <button style="background: none; border: none; color: var(--text-muted); cursor: pointer;">
+                                </a>
+                                <a href="/admin/drivers/{{ $driver['id'] }}/edit" class="btn-info"
+                                    style="color: var(--text-muted);">
                                     <i data-lucide="edit-3" class="icon-sm"></i>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>

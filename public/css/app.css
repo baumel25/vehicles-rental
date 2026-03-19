@@ -929,3 +929,90 @@ input:checked + .slider:before { transform: translateX(24px); }
         left: 0;
     }
 }
+
+/* Sidebar Overlay */
+.sidebar-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.6);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    display: none;
+}
+
+.sidebar-overlay.active {
+    display: block;
+}
+
+/* Modals */
+.modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.8);
+    backdrop-filter: blur(8px);
+    z-index: 3000;
+    display: none;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-overlay.active {
+    display: flex;
+}
+
+/* Grid Layouts for Details */
+.admin-detail-grid {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 3rem;
+}
+
+@media (max-width: 1024px) {
+    .admin-detail-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .admin-main {
+        padding: 2rem 1.5rem;
+    }
+
+    .admin-sidebar {
+        left: -280px;
+        transition: 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .admin-sidebar.active {
+        left: 0;
+    }
+}
+
+/* Form Styles */
+.admin-form-group {
+    margin-bottom: 2rem;
+}
+
+.admin-form-group label {
+    display: block;
+    font-size: 0.75rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    margin-bottom: 0.8rem;
+}
+
+.admin-form-control {
+    width: 100%;
+    background: rgba(255,255,255,0.03);
+    border: 1px solid var(--glass-border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    color: white;
+    font-size: 0.9rem;
+    transition: 0.3s;
+}
+
+.admin-form-control:focus {
+    border-color: var(--primary);
+    background: rgba(62, 123, 250, 0.05);
+    outline: none;
+}

@@ -21,6 +21,8 @@
 
 <body class="bg-bg-main text-text-main">
 
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
     <div class="admin-layout">
         <!-- Sidebar -->
         <aside class="admin-sidebar" id="adminSidebar">
@@ -38,11 +40,15 @@
                     class="admin-nav-link {{ request()->is('admin/dashboard') ? 'active' : '' }}">
                     <i data-lucide="layout-dashboard"></i> Dashboard
                 </a>
+                <a href="/admin/categories"
+                    class="admin-nav-link {{ request()->is('admin/categories*') ? 'active' : '' }}">
+                    <i data-lucide="grid"></i> Categories
+                </a>
                 <a href="/admin/vehicles" class="admin-nav-link {{ request()->is('admin/vehicles*') ? 'active' : '' }}">
                     <i data-lucide="car"></i> Fleet Management
                 </a>
                 <a href="/admin/drivers" class="admin-nav-link {{ request()->is('admin/drivers*') ? 'active' : '' }}">
-                    <i data-lucide="users"></i> Drivers List
+                    <i data-lucide="users"></i> Drivers Registry
                 </a>
                 <a href="/admin/reservations"
                     class="admin-nav-link {{ request()->is('admin/reservations*') ? 'active' : '' }}">
@@ -62,7 +68,7 @@
 
         <!-- Main Content -->
         <main class="admin-main">
-            <!-- Mobile Toggle -->
+            <!-- Mobile Header -->
             <div class="admin-header">
                 <div class="flex items-center gap-4">
                     <button class="mobile-toggle" id="adminSidebarToggle" style="display: none;">
@@ -72,7 +78,7 @@
                 </div>
 
                 <div class="flex items-center gap-4">
-                    <div class="search-field"
+                    <div class="search-field hidden-sm"
                         style="width: 300px; background: rgba(255,255,255,0.05); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
                         <i data-lucide="search" class="icon-sm"></i>
                         <input type="text" placeholder="Search anything..."
@@ -89,18 +95,25 @@
         </main>
     </div>
 
+    <!-- Modals Container -->
+    @stack('modals')
+
     <script>
         lucide.createIcons();
 
         // Admin Sidebar Logic
         const sidebarToggle = document.getElementById('adminSidebarToggle');
         const sidebar = document.getElementById('adminSidebar');
+        const overlay = document.getElementById('sidebarOverlay');
 
-        if (sidebarToggle) {
-            sidebarToggle.onclick = () => {
-                sidebar.classList.toggle('active');
-            };
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+            document.body.style.overflow = sidebar.classList.contains('active') ? 'hidden' : '';
         }
+
+        if (sidebarToggle) sidebarToggle.onclick = toggleSidebar;
+        if (overlay) overlay.onclick = toggleSidebar;
 
         // Handle responsive display
         function checkWidth() {
@@ -109,12 +122,24 @@
             } else {
                 sidebarToggle.style.display = 'none';
                 sidebar.classList.remove('active');
+                overlay.classList.remove('active');
+                document.body.style.overflow = '';
             }
         }
 
         window.onresize = checkWidth;
         checkWidth();
+
+        // Modal Logic Helper
+        function openModal(id) {
+            document.getElementById(id).classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
     </script>
+    @stack('scripts')
 </body>
 
 </html>

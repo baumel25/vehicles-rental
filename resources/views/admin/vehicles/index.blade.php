@@ -8,9 +8,9 @@
             <h3 class="text-xl font-bold">Manage Vehicle Fleet</h3>
             <p class="text-xs text-muted font-bold mt-2">Update inventory, pricing, and vehicle status</p>
         </div>
-        <button class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">
+        <a href="/admin/vehicles/create" class="btn btn-primary" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">
             <i data-lucide="plus" class="icon-sm" style="margin-right: 0.5rem;"></i> Add New Vehicle
-        </button>
+        </a>
     </div>
 
     <div class="table-container">
@@ -80,12 +80,14 @@
                         </td>
                         <td>
                             <div class="flex gap-2">
-                                <button style="background: none; border: none; color: var(--primary); cursor: pointer;">
+                                <a href="/admin/vehicles/{{ $vehicle['id'] }}" class="btn-info"
+                                    style="color: var(--primary);">
+                                    <i data-lucide="eye" class="icon-sm"></i>
+                                </a>
+                                <a href="/admin/vehicles/{{ $vehicle['id'] }}/edit" class="btn-info"
+                                    style="color: var(--text-muted);">
                                     <i data-lucide="edit-3" class="icon-sm"></i>
-                                </button>
-                                <button style="background: none; border: none; color: #ef4444; cursor: pointer;">
-                                    <i data-lucide="trash-2" class="icon-sm"></i>
-                                </button>
+                                </a>
                             </div>
                         </td>
                     </tr>

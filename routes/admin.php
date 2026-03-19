@@ -1,12 +1,28 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\AdminController;
+use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
     Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
     Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
-    Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles');
-    Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers');
-    Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations');
+
+    // Categories
+    Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories.index');
+    Route::get('/categories/{id}', [AdminController::class, 'showCategory'])->name('admin.categories.show');
+
+    // Vehicles
+    Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles.index');
+    Route::get('/vehicles/create', [AdminController::class, 'createVehicle'])->name('admin.vehicles.create');
+    Route::get('/vehicles/{id}', [AdminController::class, 'showVehicle'])->name('admin.vehicles.show');
+    Route::get('/vehicles/{id}/edit', [AdminController::class, 'editVehicle'])->name('admin.vehicles.edit');
+
+    // Drivers
+    Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers.index');
+    Route::get('/drivers/create', [AdminController::class, 'createDriver'])->name('admin.drivers.create');
+    Route::get('/drivers/{id}', [AdminController::class, 'showDriver'])->name('admin.drivers.show');
+    Route::get('/drivers/{id}/edit', [AdminController::class, 'editDriver'])->name('admin.drivers.edit');
+
+    // Reservations
+    Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations.index');
 });
