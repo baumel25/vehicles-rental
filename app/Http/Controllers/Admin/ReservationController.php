@@ -39,8 +39,26 @@ class ReservationController extends Controller
             'status' => 'required|in:Pending,Confirmed,Completed,Cancelled',
         ]);
 
-        $reservation = Reservation::findOrFail($id);
+        $reservation = Reservation::with(['user', 'driver'])->findOrFail($id);
         $reservation->update(['status' => $request->status]);
+
+        // Notify User and Driver
+        try {
+            if ($request->status === 'Confirmed') {
+                // To User
+                \Illuminate\Support\Facades\Mail::to($reservation->user->email)->send(new \App\Mail\BookingApprovedUserNotification($reservation));
+                
+                // To Driver if exists
+                if ($reservation->driver_id && $reservation->driver) {
+                    \Illuminate\Support\Facades\Mail::to($reservation->driver->email)->send(new \App\Mail\BookingApprovedDriverNotification($reservation));
+                }
+            } elseif ($request->status === 'Cancelled') {
+                // To User
+                \Illuminate\Support\Facades\Mail::to($reservation->user->email)->send(new \App\Mail\BookingDeclinedUserNotification($reservation));
+            }
+        } catch (\Exception $e) {
+            \Illuminate\Support\Facades\Log::error('Mail error on status update: ' . $e->getMessage());
+        }
 
         return redirect()->back()->with('success', 'Reservation status updated successfully.');
     }

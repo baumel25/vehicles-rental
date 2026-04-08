@@ -41,7 +41,7 @@ class BookingController extends Controller
             $totalPrice += $driver->base_rate * $days;
         }
 
-        Reservation::create([
+        $reservation = Reservation::create([
             'user_id' => Auth::id(),
             'vehicle_id' => $request->vehicle_id,
             'driver_id' => $request->driver_id,
@@ -50,6 +50,17 @@ class BookingController extends Controller
             'total_price' => $totalPrice,
             'status' => 'Pending',
         ]);
+
+        // Notify Admins
+        try {
+            $admins = \App\Models\Admin::all();
+            foreach ($admins as $admin) {
+                \Illuminate\Support\Facades\Mail::to($admin->email)->send(new \App\Mail\NewReservationAdminNotification($reservation));
+            }
+        } catch (\Exception $e) {
+            // Log error but allow process to continue
+            \Illuminate\Support\Facades\Log::error('Mail error: ' . $e->getMessage());
+        }
 
         return redirect()->route('bookings.index')->with('success', 'Booking requested successfully! We will confirm it soon.');
     }
