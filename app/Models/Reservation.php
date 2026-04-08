@@ -39,4 +39,9 @@ class Reservation extends Model
     {
         return $this->belongsTo(Driver::class);
     }
+
+    public function payments()
+    {
+        return $this->hasMany(Payment::class);
+    }
 }

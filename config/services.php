@@ -35,4 +35,10 @@ return [
         ],
     ],
 
+    'campay' => [
+        'token' => env('CAMPAY_TOKEN'),
+        'base_url' => env('CAMPAY_BASE_URL', 'https://demo.campay.net/api'),
+        'prefix' => env('CAMPAY_EXTERNAL_REFERENCE_PREFIX', 'LUX-'),
+    ],
+
 ];

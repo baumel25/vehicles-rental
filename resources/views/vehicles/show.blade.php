@@ -84,21 +84,31 @@
                         <span class="text-muted font-bold"> / day</span>
                     </div>
 
-                    <form class="booking-form" action="{{ route('bookings.store') }}" method="POST">
+                    <form class="booking-form" action="{{ route('bookings.store') }}" method="POST" id="bookingForm">
                         @csrf
                         <input type="hidden" name="vehicle_id" value="{{ $vehicle->id }}">
 
-                        <div class="flex gap-2">
-                            <div class="input-block flex-1">
-                                <label>Pick-up Date</label>
-                                <input type="date" name="pickup_date" id="startDate" required
-                                    min="{{ date('Y-m-d', strtotime('+1 day')) }}">
+                        <div class="grid grid-2 gap-4">
+                            <div class="input-block-premium">
+                                <label class="label-premium">
+                                    <i data-lucide="calendar-days" class="icon-sm"></i>
+                                    Pickup Date
+                                </label>
+                                <input type="date" name="pickup_date" id="startDate" class="glass-input" required
+                                    value="{{ old('pickup_date') }}" min="{{ date('Y-m-d', strtotime('+1 day')) }}">
                             </div>
-                            <div class="input-block flex-1">
-                                <label>Return Date</label>
-                                <input type="date" name="return_date" id="endDate" required
-                                    min="{{ date('Y-m-d', strtotime('+2 days')) }}">
+                            <div class="input-block-premium">
+                                <label class="label-premium">
+                                    <i data-lucide="calendar-check" class="icon-sm"></i>
+                                    Return Date
+                                </label>
+                                <input type="date" name="return_date" id="endDate" class="glass-input" required
+                                    value="{{ old('return_date') }}" min="{{ date('Y-m-d', strtotime('+2 days')) }}">
                             </div>
+                        </div>
+
+                        <div class="mb-10 animate-fade-in" style="display: none;">
+                            <input type="text" name="payment_phone" id="hidden_payment_phone">
                         </div>
 
                         @php
@@ -112,43 +122,53 @@
                         @endphp
 
                         @if ($qualifiedDrivers->count() > 0)
-                            <div class="toggle-group">
-                                <span class="text-sm font-bold">Rent with Professional Driver</span>
-                                <label class="switch">
-                                    <input type="checkbox" id="driverToggle">
-                                    <span class="slider"></span>
-                                </label>
-                            </div>
-
-                            <div id="driverSelection" style="display: none;">
-                                <label class="text-xs font-bold text-muted uppercase mb-4"
-                                    style="display: block;">Qualified
-                                    Drivers</label>
-                                @foreach ($qualifiedDrivers as $driver)
-                                    <label class="driver-item" style="position: relative; cursor: pointer;">
-                                        <input type="radio" name="driver_id" value="{{ $driver->id }}"
-                                            data-rate="{{ $driver->base_rate }}"
-                                            {{ old('driver_id') == $driver->id ? 'checked' : '' }} style="display: none;">
-                                        @if ($driver->profile_picture)
-                                            <img src="{{ asset('storage/' . $driver->profile_picture) }}"
-                                                class="driver-avatar">
-                                        @else
-                                            <div class="driver-avatar flex items-center justify-center bg-glass-10">
-                                                <i data-lucide="user" class="icon-sm"></i>
-                                            </div>
-                                        @endif
-                                        <div class="flex-1">
-                                            <div class="text-sm font-bold">{{ $driver->name }}</div>
-                                            <div class="text-xs text-muted">{{ $driver->experience_years }} Yrs Exp |
-                                                ${{ number_format($driver->base_rate, 0) }}/day</div>
-                                        </div>
-                                        <button type="button" class="btn-info"
-                                            onclick="showDriverInfo('{{ $driver->name }}', '{{ $driver->profile_picture ? asset('storage/' . $driver->profile_picture) : '' }}', '{{ $driver->biography }}', '{{ $driver->experience_years }}')"
-                                            style="background: none; border: none; color: var(--primary); font-size: 0.7rem; font-weight: 700; cursor: pointer; text-decoration: underline;">
-                                            Info
-                                        </button>
+                            <div class="input-block-premium">
+                                <div class="toggle-group mb-0">
+                                    <span class="text-sm font-bold flex items-center gap-2">
+                                        <i data-lucide="user-check" class="text-primary icon-sm"></i>
+                                        Rent with Professional Driver
+                                    </span>
+                                    <label class="switch">
+                                        <input type="checkbox" id="driverToggle" name="with_driver">
+                                        <span class="slider"></span>
                                     </label>
-                                @endforeach
+                                </div>
+
+                                <div id="driverSelection"
+                                    style="display: none; margin-top: 1.5rem; border-top: 1px solid var(--glass-border); pt-6">
+                                    <label class="label-premium mt-6">Select Your Chauffeur</label>
+                                    <div class="flex flex-col gap-3">
+                                        @foreach ($qualifiedDrivers as $driver)
+                                            <label class="driver-item"
+                                                style="position: relative; cursor: pointer; border-radius: 14px;">
+                                                <input type="radio" name="driver_id" value="{{ $driver->id }}"
+                                                    data-rate="{{ $driver->base_rate }}"
+                                                    {{ old('driver_id') == $driver->id ? 'checked' : '' }}
+                                                    style="display: none;">
+                                                @if ($driver->profile_picture)
+                                                    <img src="{{ asset('storage/' . $driver->profile_picture) }}"
+                                                        class="driver-avatar">
+                                                @else
+                                                    <div
+                                                        class="driver-avatar flex items-center justify-center bg-glass-10">
+                                                        <i data-lucide="user" class="icon-sm"></i>
+                                                    </div>
+                                                @endif
+                                                <div class="flex-1">
+                                                    <div class="text-sm font-bold">{{ $driver->name }}</div>
+                                                    <div class="text-[10px] text-muted">{{ $driver->experience_years }}
+                                                        Yrs |
+                                                        ${{ number_format($driver->base_rate, 0) }}/day</div>
+                                                </div>
+                                                <button type="button" class="btn-info"
+                                                    onclick="showDriverInfo('{{ $driver->name }}', '{{ $driver->profile_picture ? asset('storage/' . $driver->profile_picture) : '' }}', '{{ $driver->biography }}', '{{ $driver->experience_years }}')"
+                                                    style="background: none; border: none; color: var(--primary); font-size: 0.7rem; font-weight: 700; cursor: pointer;">
+                                                    Info
+                                                </button>
+                                            </label>
+                                        @endforeach
+                                    </div>
+                                </div>
                             </div>
                             @error('driver_id')
                                 <div
@@ -187,8 +207,8 @@
                         </div>
 
                         @auth
-                            <button type="submit" class="btn btn-primary full-width p-12 mt-4">
-                                <i data-lucide="check-circle" class="icon-md" style="margin-right: 0.5rem;"></i>
+                            <button type="button" onclick="openPaymentModal()" class="btn btn-primary full-width p-12 mt-4">
+                                <i data-lucide="shield-check" class="icon-md" style="margin-right: 0.5rem;"></i>
                                 Confirm Reservation
                             </button>
                         @else
@@ -198,8 +218,56 @@
                 </div>
             </div>
         </div>
-        </div>
     </section>
+
+    <!-- Payment Modal -->
+    <div class="mobile-menu-overlay" id="paymentOverlay"></div>
+    <div class="modal" id="paymentModal">
+        <div class="modal-content">
+            <button class="mobile-close" onclick="closePaymentModal()">
+                <i data-lucide="x"></i>
+            </button>
+
+            <div class="text-center mb-8">
+                <div class="flex items-center justify-center w-16 h-16 bg-primary/10 rounded-full mx-auto mb-4">
+                    <i data-lucide="credit-card" class="text-primary w-8 h-8"></i>
+                </div>
+                <h2 class="mb-2">Secure <span class="text-gradient">Deposit</span></h2>
+                <p class="text-muted text-sm">Pay 1-day rental to confirm your booking.</p>
+            </div>
+
+            <div class="bg-glass-05 p-6 rounded-2xl mb-8 border border-white/05">
+                <div class="flex justify-between mb-4">
+                    <span class="text-muted text-sm">Vehicle Deposit (1 Day)</span>
+                    <span class="font-bold text-white" id="modalVehiclePrice">--</span>
+                </div>
+                <div class="flex justify-between mb-4 border-t border-white/05 pt-4" id="modalDriverRow"
+                    style="display: none;">
+                    <span class="text-muted text-sm">Driver Deposit (1 Day)</span>
+                    <span class="font-bold text-white" id="modalDriverPrice">--</span>
+                </div>
+                <div class="flex justify-between border-t border-white/10 pt-4 mt-4">
+                    <span class="font-extrabold uppercase tracking-widest text-xs text-primary">Total Deposit</span>
+                    <span class="text-2xl font-black text-white" id="modalTotalDeposit">--</span>
+                </div>
+            </div>
+
+            <div class="mb-8">
+                <label class="block text-xs font-bold text-muted uppercase tracking-widest mb-4">Momo Number
+                    (MTN/Orange)</label>
+                <input type="text" id="momo_phone" class="glass-input full-width text-center text-lg tracking-widest"
+                    placeholder="6XXXXXXXX" maxlength="9">
+                <div id="momo_error" class="text-red-500 text-[10px] mt-2 font-bold transition-all"
+                    style="display: none;">Please enter a valid 9-digit number.</div>
+            </div>
+
+            <button type="button" onclick="submitBooking()" class="btn btn-primary full-width p-12">
+                <i data-lucide="unlock" class="icon-md" style="margin-right: 0.5rem;"></i>
+                Pay & Secure Booking
+            </button>
+            <p class="text-[10px] text-muted text-center mt-4">A payment prompt will be sent to your phone.</p>
+        </div>
+    </div>
 
     <!-- Driver Info Modal -->
     <div class="mobile-menu-overlay" id="modalOverlay"></div>
@@ -319,6 +387,78 @@
 
             document.getElementById('modalClose').onclick = closeModal;
             modalOverlay.onclick = closeModal;
+
+            // Payment Modal Logic
+            const paymentModal = document.getElementById('paymentModal');
+            const paymentOverlay = document.getElementById('paymentOverlay');
+            const momoPhone = document.getElementById('momo_phone');
+            const hiddenPhone = document.getElementById('hidden_payment_phone');
+            const momoError = document.getElementById('momo_error');
+
+            const modalVehiclePrice = document.getElementById('modalVehiclePrice');
+            const modalDriverPrice = document.getElementById('modalDriverPrice');
+            const modalTotalDeposit = document.getElementById('modalTotalDeposit');
+            const modalDriverRow = document.getElementById('modalDriverRow');
+
+            function openPaymentModal() {
+                // Validation check for dates
+                if (!startDateInput.value || !endDateInput.value) {
+                    alert('Please select pickup and return dates.');
+                    return;
+                }
+
+                if (new Date(endDateInput.value) <= new Date(startDateInput.value)) {
+                    alert('Return date must be after pickup date.');
+                    return;
+                }
+
+                // Update Modal values
+                modalVehiclePrice.innerText = `$${dailyRate.toLocaleString()}`;
+
+                let deposit = dailyRate;
+                if (driverToggle && driverToggle.checked) {
+                    const selectedDriver = document.querySelector('input[name="driver_id"]:checked');
+                    if (!selectedDriver) {
+                        alert('Please select a driver or disable the chauffeur option.');
+                        return;
+                    }
+                    const rate = parseFloat(selectedDriver.dataset.rate);
+                    modalDriverPrice.innerText = `$${rate.toLocaleString()}`;
+                    modalDriverRow.style.display = 'flex';
+                    deposit += rate;
+                } else {
+                    modalDriverRow.style.display = 'none';
+                }
+
+                modalTotalDeposit.innerText = `$${deposit.toLocaleString()}`;
+
+                paymentModal.classList.add('active');
+                paymentOverlay.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+
+            function closePaymentModal() {
+                paymentModal.classList.remove('active');
+                paymentOverlay.classList.remove('active');
+                document.body.style.overflow = 'auto';
+            }
+
+            function submitBooking() {
+                const phone = momoPhone.value.trim();
+                const regex = /^6[0-9]{8}$/;
+
+                if (!regex.test(phone)) {
+                    momoError.style.display = 'block';
+                    momoPhone.style.borderColor = '#ef4444';
+                    return;
+                }
+
+                momoError.style.display = 'none';
+                hiddenPhone.value = phone;
+                document.getElementById('bookingForm').submit();
+            }
+
+            paymentOverlay.addEventListener('click', closePaymentModal);
         </script>
     @endpush
 @endsection

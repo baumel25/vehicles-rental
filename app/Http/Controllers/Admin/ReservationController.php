@@ -55,6 +55,28 @@ class ReservationController extends Controller
             } elseif ($request->status === 'Cancelled') {
                 // To User
                 \Illuminate\Support\Facades\Mail::to($reservation->user->email)->send(new \App\Mail\BookingDeclinedUserNotification($reservation));
+
+                // TRIGGER REFUND (ESCROW LOGIC)
+                $payment = \App\Models\Payment::where('reservation_id', $reservation->id)
+                    ->where('type', 'Deposit')
+                    ->where('status', 'Successful') // Assuming we check status before or it's updated via callback
+                    ->first();
+
+                if ($payment) {
+                    $campay = new \App\Services\CampayService();
+                    $refundResponse = $campay->withdraw($payment->phone_number, $payment->amount, "Refund for Declined Reservation #{$reservation->id}");
+
+                    if ($refundResponse && isset($refundResponse['reference'])) {
+                        \App\Models\Payment::create([
+                            'reservation_id' => $reservation->id,
+                            'amount' => $payment->amount,
+                            'phone_number' => $payment->phone_number,
+                            'external_reference' => $refundResponse['reference'],
+                            'status' => 'Pending',
+                            'type' => 'Refund',
+                        ]);
+                    }
+                }
             }
         } catch (\Exception $e) {
             \Illuminate\Support\Facades\Log::error('Mail error on status update: ' . $e->getMessage());

@@ -27,7 +27,13 @@ Route::middleware('auth')->group(function () {
     Route::post('/bookings', [BookingController::class, 'store'])->name('bookings.store');
     Route::get('/bookings/{id}', [BookingController::class, 'show'])->name('bookings.show');
     Route::post('/bookings/{id}/cancel', [BookingController::class, 'cancel'])->name('bookings.cancel');
+
+    // Payments
+    Route::get('/payments/verify/{reservation_id}', [PaymentController::class, 'verify'])->name('payments.verify');
 });
+
+// Callback (Outside auth if needed, but here we can protect or use exclusion)
+Route::post('/payments/callback', [App\Http\Controllers\PaymentController::class, 'callback'])->name('payments.callback');
 
 Route::get('/about', function () {
     return view('about');

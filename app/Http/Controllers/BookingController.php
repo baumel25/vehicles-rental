@@ -17,7 +17,7 @@ class BookingController extends Controller
 {
     public function index()
     {
-        $bookings = Reservation::with('vehicle', 'driver')
+        $bookings = Reservation::with(['vehicle', 'driver', 'payments'])
             ->where('user_id', Auth::id())
             ->latest()
             ->paginate(10);
@@ -32,6 +32,9 @@ class BookingController extends Controller
             'driver_id' => 'nullable|exists:drivers,id',
             'pickup_date' => 'required|date|after:today',
             'return_date' => 'required|date|after:pickup_date',
+            'payment_phone' => 'required|string|regex:/^6[0-9]{8}$/',
+        ], [
+            'payment_phone.regex' => 'Please enter a valid 9-digit phone number starting with 6 (e.g. 6XXXXXXXX).',
         ]);
 
         $vehicle = Vehicle::findOrFail($request->vehicle_id);
@@ -75,10 +78,12 @@ class BookingController extends Controller
 
         $days = $pickup->diffInDays($return) ?: 1;
         $totalPrice = $vehicle->daily_rate * $days;
+        $depositAmount = $vehicle->daily_rate; // 1-day vehicle rate
 
         if ($request->driver_id) {
             $driver = Driver::findOrFail($request->driver_id);
             $totalPrice += $driver->base_rate * $days;
+            $depositAmount += $driver->base_rate; // Add 1-day driver rate
         }
 
         $reservation = Reservation::create([
@@ -90,6 +95,21 @@ class BookingController extends Controller
             'total_price' => $totalPrice,
             'status' => 'Pending',
         ]);
+
+        // Initiate Payment
+        $campay = new \App\Services\CampayService();
+        $response = $campay->collect($request->payment_phone, $depositAmount, "Deposit for Reservation #{$reservation->id}");
+
+        if ($response && isset($response['reference'])) {
+            \App\Models\Payment::create([
+                'reservation_id' => $reservation->id,
+                'amount' => $depositAmount,
+                'phone_number' => $request->payment_phone,
+                'external_reference' => $response['reference'],
+                'status' => 'Pending',
+                'type' => 'Deposit',
+            ]);
+        }
 
         // Notify Admins
         try {

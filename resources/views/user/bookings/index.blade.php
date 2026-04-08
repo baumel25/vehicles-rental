@@ -83,6 +83,21 @@
                                                 title="View Details">
                                                 <i data-lucide="eye" style="width: 18px; height: 18px;"></i>
                                             </a>
+
+                                            @php
+                                                $pendingDeposit = $booking->payments
+                                                    ->where('type', 'Deposit')
+                                                    ->where('status', 'Pending')
+                                                    ->first();
+                                            @endphp
+
+                                            @if ($pendingDeposit)
+                                                <a href="{{ route('payments.verify', $booking->id) }}" class="btn-icon"
+                                                    style="color: var(--primary);" title="Verify Payment Status">
+                                                    <i data-lucide="refresh-cw" style="width: 18px; height: 18px;"></i>
+                                                </a>
+                                            @endif
+
                                             @if ($booking->status === 'Pending')
                                                 <form action="{{ route('bookings.cancel', $booking->id) }}" method="POST"
                                                     onsubmit="return confirm('Are you sure you want to cancel this booking?')">
