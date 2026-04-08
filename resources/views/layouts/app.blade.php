@@ -18,10 +18,21 @@
     <!-- Direct link to Vanilla CSS in public directory -->
     <link rel="stylesheet" href="/css/app.css">
 
+    <!-- FOUC Prevention Script -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('luxdrive-theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-theme');
+                document.body?.classList.add('light-theme');
+            }
+        })();
+    </script>
+
     @stack('styles')
 </head>
 
-<body>
+<body class="bg-bg-main text-text-main">
 
     <!-- Navigation -->
     <nav class="navbar">
@@ -41,6 +52,10 @@
             </ul>
 
             <div class="flex items-center gap-4 nav-auth">
+                <button id="themeToggle" class="btn-icon" title="Toggle Theme">
+                    <i data-lucide="sun" class="sun-icon"></i>
+                    <i data-lucide="moon" class="moon-icon"></i>
+                </button>
                 <a href="#" style="font-size: 0.9rem; font-weight: 500;">Sign In</a>
                 <a href="/vehicles" class="btn btn-primary nav-auth-btn">Rent Now</a>
             </div>
@@ -162,6 +177,33 @@
         menuOpen.onclick = toggleMenu;
         menuClose.onclick = toggleMenu;
         menuOverlay.onclick = toggleMenu;
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const body = document.body;
+
+        function updateTheme() {
+            const theme = localStorage.getItem('luxdrive-theme') || 'dark';
+            if (theme === 'light') {
+                body.classList.add('light-theme');
+                html.classList.add('light-theme');
+            } else {
+                body.classList.remove('light-theme');
+                html.classList.remove('light-theme');
+            }
+            lucide.createIcons();
+        }
+
+        // Initialize theme on body load
+        updateTheme();
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('luxdrive-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('luxdrive-theme', newTheme);
+            updateTheme();
+        });
     </script>
     @stack('scripts')
 </body>

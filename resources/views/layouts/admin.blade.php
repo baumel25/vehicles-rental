@@ -17,6 +17,17 @@
 
     <!-- Global CSS -->
     <link rel="stylesheet" href="/css/app.css">
+
+    <!-- FOUC Prevention Script -->
+    <script>
+        (function() {
+            const theme = localStorage.getItem('luxdrive-theme') || 'dark';
+            if (theme === 'light') {
+                document.documentElement.classList.add('light-theme');
+                document.body?.classList.add('light-theme');
+            }
+        })();
+    </script>
 </head>
 
 <body class="bg-bg-main text-text-main">
@@ -83,13 +94,17 @@
 
                 <div class="flex items-center gap-4">
                     <div class="search-field hidden-sm"
-                        style="width: 300px; background: rgba(255,255,255,0.05); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
+                        style="width: 300px; background: var(--glass-05); padding: 0.8rem 1.2rem; border-radius: 12px; border: 1px solid var(--glass-border);">
                         <i data-lucide="search" class="icon-sm"></i>
                         <input type="text" placeholder="Search anything..."
-                            style="background: transparent; border: none; color: white; width: 100%;">
+                            style="background: transparent; border: none; color: var(--text-main); width: 100%;">
                     </div>
+                    <button id="themeToggle" class="btn-icon" title="Toggle Theme">
+                        <i data-lucide="sun" class="sun-icon"></i>
+                        <i data-lucide="moon" class="moon-icon"></i>
+                    </button>
                     <div
-                        style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800;">
+                        style="width: 40px; height: 40px; border-radius: 50%; background: var(--primary); display: flex; align-items: center; justify-content: center; font-weight: 800; color: white;">
                         A
                     </div>
                 </div>
@@ -142,6 +157,33 @@
         function closeModal(id) {
             document.getElementById(id).classList.remove('active');
         }
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const html = document.documentElement;
+        const body = document.body;
+
+        function updateTheme() {
+            const theme = localStorage.getItem('luxdrive-theme') || 'dark';
+            if (theme === 'light') {
+                body.classList.add('light-theme');
+                html.classList.add('light-theme');
+            } else {
+                body.classList.remove('light-theme');
+                html.classList.remove('light-theme');
+            }
+            lucide.createIcons();
+        }
+
+        // Initialize theme on body load
+        updateTheme();
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = localStorage.getItem('luxdrive-theme') || 'dark';
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            localStorage.setItem('luxdrive-theme', newTheme);
+            updateTheme();
+        });
     </script>
     @stack('scripts')
 </body>
