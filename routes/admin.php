@@ -1,22 +1,27 @@
 <?php
 
 use App\Http\Controllers\Admin\AdminController;
+use App\Http\Controllers\Admin\AuthController;
+use App\Http\Controllers\Admin\CategoryController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
     // Guest Admin Routes
-    Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
-    Route::post('/authenticate', [AdminController::class, 'authenticate'])->name('admin.authenticate');
+    Route::get('/login', [AuthController::class, 'login'])->name('admin.login');
+    Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('admin.authenticate');
 
     // Protected Admin Routes
     Route::middleware('admin')->group(function () {
-        Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
+        Route::post('/logout', [AuthController::class, 'logout'])->name('admin.logout');
 
         Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
         // Categories
-        Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories.index');
-        Route::get('/categories/{id}', [AdminController::class, 'showCategory'])->name('admin.categories.show');
+        Route::get('/categories', [CategoryController::class, 'index'])->name('admin.categories.index');
+        Route::get('/categories/{id}', [CategoryController::class, 'show'])->name('admin.categories.show');
+        Route::post('/categories', [CategoryController::class, 'store'])->name('admin.categories.store');
+        Route::put('/categories/{id}', [CategoryController::class, 'update'])->name('admin.categories.update');
+        Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.delete');
 
         // Vehicles
         Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles.index');

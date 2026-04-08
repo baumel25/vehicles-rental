@@ -54,23 +54,53 @@
                 <div class="admin-form-group">
                     <label>Main Category</label>
                     <div class="search-field">
-                        <select class="admin-form-control">
-                            <option value="1">Luxury Cars</option>
-                            <option value="2">Sports Bikes</option>
+                        <select class="admin-form-control" name="category_id" id="mainCategorySelect"
+                            onchange="updateSubCategories()">
+                            <option value="">Select Main Category</option>
+                            @foreach ($categories as $category)
+                                <option value="{{ $category->id }}"
+                                    {{ request('category_id') == $category->id ? 'selected' : '' }}>{{ $category->name }}
+                                </option>
+                            @endforeach
                         </select>
                     </div>
                 </div>
                 <div class="admin-form-group">
                     <label>Sub-category</label>
                     <div class="search-field">
-                        <select class="admin-form-control">
-                            <option value="1">Sedans</option>
-                            <option value="2">SUVs</option>
-                            <option value="3">Convertibles</option>
+                        <select class="admin-form-control" name="sub_category_id" id="subCategorySelect">
+                            <option value="">Select Sub-category</option>
                         </select>
                     </div>
                 </div>
             </div>
+
+            <script>
+                const categories = @json($categories);
+
+                function updateSubCategories() {
+                    const mainId = document.getElementById('mainCategorySelect').value;
+                    const subSelect = document.getElementById('subCategorySelect');
+                    subSelect.innerHTML = '<option value="">Select Sub-category</option>';
+
+                    if (mainId) {
+                        const parent = categories.find(c => c.id == mainId);
+                        if (parent && parent.children) {
+                            parent.children.forEach(child => {
+                                const option = document.createElement('option');
+                                option.value = child.id;
+                                option.text = child.name;
+                                subSelect.appendChild(option);
+                            });
+                        }
+                    }
+                }
+
+                // Initialize on load
+                window.onload = function() {
+                    updateSubCategories();
+                };
+            </script>
 
             <div class="admin-form-group">
                 <label>Description</label>
