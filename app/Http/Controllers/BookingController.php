@@ -2,12 +2,16 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Mail\NewReservationAdminNotification;
+use App\Models\Admin;
+use App\Models\Driver;
 use App\Models\Reservation;
 use App\Models\Vehicle;
-use App\Models\Driver;
-use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Mail;
 
 class BookingController extends Controller
 {
@@ -17,6 +21,7 @@ class BookingController extends Controller
             ->where('user_id', Auth::id())
             ->latest()
             ->paginate(10);
+
         return view('user.bookings.index', compact('bookings'));
     }
 
@@ -32,8 +37,43 @@ class BookingController extends Controller
         $vehicle = Vehicle::findOrFail($request->vehicle_id);
         $pickup = Carbon::parse($request->pickup_date);
         $return = Carbon::parse($request->return_date);
-        $days = $pickup->diffInDays($return) ?: 1;
 
+        // 1. Check Vehicle Availability (Fleet Quantity)
+        $conflictingVehicleReservations = Reservation::where('vehicle_id', $vehicle->id)
+            ->whereIn('status', ['Pending', 'Confirmed'])
+            ->where(function ($query) use ($pickup, $return) {
+                $query->where(function ($q) use ($pickup, $return) {
+                    $q->where('pickup_date', '<', $return)
+                        ->where('return_date', '>', $pickup);
+                });
+            })->get();
+
+        if ($conflictingVehicleReservations->count() >= $vehicle->quantity) {
+            $earliestFreeDate = $conflictingVehicleReservations->min('return_date');
+            $dateFormatted = Carbon::parse($earliestFreeDate)->format('M d, Y');
+
+            return back()->withInput()->withErrors(['vehicle_id' => "This vehicle model is fully booked for the selected period. One will be available starting {$dateFormatted}."]);
+        }
+
+        // 2. Check Driver Availability (if selected)
+        if ($request->driver_id) {
+            $conflictingDriverReservation = Reservation::where('driver_id', $request->driver_id)
+                ->whereIn('status', ['Pending', 'Confirmed'])
+                ->where(function ($query) use ($pickup, $return) {
+                    $query->where(function ($q) use ($pickup, $return) {
+                        $q->where('pickup_date', '<', $return)
+                            ->where('return_date', '>', $pickup);
+                    });
+                })->first();
+
+            if ($conflictingDriverReservation) {
+                $dateFormatted = Carbon::parse($conflictingDriverReservation->return_date)->format('M d, Y');
+
+                return back()->withInput()->withErrors(['driver_id' => "The selected Chauffeur is already booked for these dates. He will be available again on {$dateFormatted}."]);
+            }
+        }
+
+        $days = $pickup->diffInDays($return) ?: 1;
         $totalPrice = $vehicle->daily_rate * $days;
 
         if ($request->driver_id) {
@@ -53,13 +93,13 @@ class BookingController extends Controller
 
         // Notify Admins
         try {
-            $admins = \App\Models\Admin::all();
+            $admins = Admin::all();
             foreach ($admins as $admin) {
-                \Illuminate\Support\Facades\Mail::to($admin->email)->send(new \App\Mail\NewReservationAdminNotification($reservation));
+                Mail::to($admin->email)->send(new NewReservationAdminNotification($reservation));
             }
         } catch (\Exception $e) {
             // Log error but allow process to continue
-            \Illuminate\Support\Facades\Log::error('Mail error: ' . $e->getMessage());
+            Log::error('Mail error: '.$e->getMessage());
         }
 
         return redirect()->route('bookings.index')->with('success', 'Booking requested successfully! We will confirm it soon.');
@@ -68,6 +108,7 @@ class BookingController extends Controller
     public function show($id)
     {
         $booking = Reservation::with('vehicle', 'driver')->where('user_id', Auth::id())->findOrFail($id);
+
         return view('user.bookings.show', compact('booking'));
     }
 

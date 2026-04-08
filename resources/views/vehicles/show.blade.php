@@ -127,7 +127,8 @@
                                 @foreach ($qualifiedDrivers as $driver)
                                     <label class="driver-item" style="position: relative; cursor: pointer;">
                                         <input type="radio" name="driver_id" value="{{ $driver->id }}"
-                                            data-rate="{{ $driver->base_rate }}" style="display: none;">
+                                            data-rate="{{ $driver->base_rate }}"
+                                            {{ old('driver_id') == $driver->id ? 'checked' : '' }} style="display: none;">
                                         @if ($driver->profile_picture)
                                             <img src="{{ asset('storage/' . $driver->profile_picture) }}"
                                                 class="driver-avatar">
@@ -149,6 +150,20 @@
                                     </label>
                                 @endforeach
                             </div>
+                            @error('driver_id')
+                                <div
+                                    class="bg-red-500/10 border border-red-500/50 p-4 rounded-lg mt-4 flex items-start gap-3 animate-fade-in">
+                                    <i data-lucide="alert-circle" class="text-red-500 icon-xs mt-1"></i>
+                                    <p class="text-red-500 text-xs font-bold">{{ $message }} </p>
+                                </div>
+                            @enderror
+                            @error('vehicle_id')
+                                <div
+                                    class="bg-amber-500/10 border border-amber-500/50 p-4 rounded-lg mt-4 flex items-start gap-3 animate-fade-in">
+                                    <i data-lucide="calendar-off" class="text-amber-500 icon-xs mt-1"></i>
+                                    <p class="text-amber-500 text-xs font-bold">{{ $message }} </p>
+                                </div>
+                            @enderror
                         @else
                             <div class="bg-glass-05 p-6 rounded-xl mt-6">
                                 <p class="text-xs text-muted italic">Self-drive only. No drivers qualified for this vehicle
@@ -183,10 +198,7 @@
                 </div>
             </div>
         </div>
-    </section>
-    </div>
-    </div>
-    </div>
+        </div>
     </section>
 
     <!-- Driver Info Modal -->
