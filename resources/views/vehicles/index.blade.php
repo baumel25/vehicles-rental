@@ -26,192 +26,94 @@
                     <i data-lucide="x"></i>
                 </button>
 
-                <div class="filter-bar">
+                <form action="{{ route('vehicles.index') }}" method="GET" class="filter-bar">
                     <div class="filter-group">
                         <label class="text-xs font-bold text-muted uppercase mb-4" style="display: block;">Search
                             Vehicle</label>
                         <div class="search-field"
                             style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border);">
                             <i data-lucide="search" class="icon-sm" style="color: var(--primary);"></i>
-                            <input type="text" placeholder="Search make or model..."
+                            <input type="text" name="search" placeholder="Search make or model..."
+                                value="{{ request('search') }}"
                                 style="background: transparent; border: none; color: white; width: 100%; font-size: 0.9rem;">
                         </div>
                     </div>
 
                     <div class="filter-select">
                         <label class="text-xs font-bold text-muted uppercase mb-4" style="display: block;">Vehicle
-                            Type</label>
+                            Category</label>
                         <div class="search-field"
                             style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <select
+                            <select name="category"
                                 style="background: transparent; border: none; color: white; width: 100%; font-size: 0.9rem;">
-                                <option value="all">All Vehicles</option>
-                                <option value="car">Luxury Cars</option>
-                                <option value="bike">Sports Bikes</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="filter-select">
-                        <label class="text-xs font-bold text-muted uppercase mb-4" style="display: block;">Price
-                            Range</label>
-                        <div class="search-field"
-                            style="background: rgba(255, 255, 255, 0.05); padding: 1rem; border-radius: 12px; border: 1px solid var(--glass-border);">
-                            <select
-                                style="background: transparent; border: none; color: white; width: 100%; font-size: 0.9rem;">
-                                <option value="any">Any Price</option>
-                                <option value="0-100">$0 - $100</option>
-                                <option value="100-200">$100 - $200</option>
-                                <option value="200+">$200+</option>
+                                <option value="">All Categories</option>
+                                @foreach ($categories as $category)
+                                    <option value="{{ $category->slug }}"
+                                        {{ request('category') == $category->slug ? 'selected' : '' }}>{{ $category->name }}
+                                    </option>
+                                @endforeach
                             </select>
                         </div>
                     </div>
 
                     <div class="align-end">
-                        <button class="btn btn-primary h-52 p-8" style="padding: 0 2rem;">Apply Filters</button>
+                        <button type="submit" class="btn btn-primary h-52 p-8" style="padding: 0 2rem;">Apply
+                            Filters</button>
                     </div>
-                </div>
+                </form>
             </div>
 
             <!-- Grid -->
             <div class="vehicle-grid">
-                @php
-                    $vehicles = [
-                        [
-                            'id' => 1,
-                            'name' => 'BMW M8 Competition',
-                            'type' => 'Luxury Sedan',
-                            'price' => 120,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 4,
-                            'trans' => 'Auto',
-                            'fuel' => 'Petrol',
-                            'qty' => 3,
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => 'Yamaha YZF R1',
-                            'type' => 'Super Sport',
-                            'price' => 80,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 1,
-                            'trans' => '6-Gears',
-                            'fuel' => 'Petrol',
-                            'qty' => 5,
-                        ],
-                        [
-                            'id' => 3,
-                            'name' => 'Porsche 911 Carrera',
-                            'type' => 'Sport Coupe',
-                            'price' => 180,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 2,
-                            'trans' => 'Manual',
-                            'fuel' => 'Petrol',
-                            'qty' => 2,
-                        ],
-                        [
-                            'id' => 4,
-                            'name' => 'Mercedes G-Wagon',
-                            'type' => 'Luxury SUV',
-                            'price' => 250,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1520031441872-265e4ff70366?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 5,
-                            'trans' => 'Auto',
-                            'fuel' => 'Diesel',
-                            'qty' => 1,
-                        ],
-                        [
-                            'id' => 5,
-                            'name' => 'Audi RS7 Sportback',
-                            'type' => 'Performance',
-                            'price' => 150,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 5,
-                            'trans' => 'Auto',
-                            'fuel' => 'Petrol',
-                            'qty' => 4,
-                        ],
-                        [
-                            'id' => 6,
-                            'name' => 'Ducati Panigale V4',
-                            'type' => 'Superbike',
-                            'price' => 95,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1568772585407-9361f9bf3a87?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 1,
-                            'trans' => '6-Gears',
-                            'fuel' => 'Petrol',
-                            'qty' => 2,
-                        ],
-                        [
-                            'id' => 7,
-                            'name' => 'Land Rover Defender',
-                            'type' => 'Off-road',
-                            'price' => 140,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1605559424843-9e4c228bf1c2?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 7,
-                            'trans' => 'Auto',
-                            'fuel' => 'Diesel',
-                            'qty' => 6,
-                        ],
-                        [
-                            'id' => 8,
-                            'name' => 'Tesla Model S Plaid',
-                            'type' => 'Electric Luxury',
-                            'price' => 200,
-                            'image' =>
-                                'https://images.unsplash.com/photo-1536700503339-1e4b06520771?auto=format&fit=crop&q=80&w=800',
-                            'seats' => 5,
-                            'trans' => 'Auto',
-                            'fuel' => 'Electric',
-                            'qty' => 3,
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($vehicles as $vehicle)
+                @forelse ($vehicles as $vehicle)
                     <div class="glass-card" style="padding: 0; overflow: hidden;">
                         <div class="card-img-wrapper">
-                            <img src="{{ $vehicle['image'] }}" alt="{{ $vehicle['name'] }}">
-                            <div class="price-tag">${{ $vehicle['price'] }} / day</div>
+                            <img src="{{ asset('storage/' . $vehicle->thumbnail) }}" alt="{{ $vehicle->name }}">
+                            <div class="price-tag">${{ number_format($vehicle->daily_rate, 0) }} / day</div>
 
                             <div
                                 style="position: absolute; top: 1rem; right: 1rem; background: var(--primary); padding: 0.3rem 0.7rem; border-radius: 8px; font-size: 0.7rem; font-weight: 700;">
-                                {{ $vehicle['qty'] }} Available
+                                {{ $vehicle->quantity }} Available
                             </div>
                         </div>
                         <div class="card-content">
-                            <h3 class="card-title">{{ $vehicle['name'] }}</h3>
-                            <p class="card-subtitle">{{ $vehicle['type'] }}</p>
+                            <h3 class="card-title">{{ $vehicle->name }}</h3>
+                            <p class="card-subtitle">{{ $vehicle->category->name }}</p>
 
                             <div class="specs-grid">
                                 <div class="spec-item">
                                     <i data-lucide="users"></i>
-                                    <span>{{ $vehicle['seats'] }} Seats</span>
+                                    <span>{{ $vehicle->seating_capacity }} Seats</span>
                                 </div>
                                 <div class="spec-item">
                                     <i data-lucide="zap"></i>
-                                    <span>{{ $vehicle['trans'] }}</span>
+                                    <span>{{ $vehicle->transmission }}</span>
                                 </div>
                                 <div class="spec-item">
                                     <i data-lucide="droplet"></i>
-                                    <span>{{ $vehicle['fuel'] }}</span>
+                                    <span>{{ $vehicle->fuel_type }}</span>
                                 </div>
                             </div>
 
-                            <a href="/vehicles/{{ $vehicle['id'] }}" class="btn btn-primary full-width small-btn">Rent This
+                            <a href="{{ route('vehicles.show', $vehicle->slug) }}"
+                                class="btn btn-primary full-width small-btn">Rent This
                                 Vehicle</a>
                         </div>
                     </div>
-                @endforeach
+                @empty
+                    <div class="col-span-full text-center p-20 glass-card">
+                        <i data-lucide="search-x" class="mx-auto mb-4 text-muted" style="width: 48px; height: 48px;"></i>
+                        <h3 class="text-lg font-bold">No Vehicles Found</h3>
+                        <p class="text-muted mt-2">Try adjusting your filters or search keywords.</p>
+                        <a href="{{ route('vehicles.index') }}" class="btn btn-outline mt-8">Clear All Filters</a>
+                    </div>
+                @endforelse
             </div>
+
+            <div class="mt-16">
+                {{ $vehicles->appends(request()->query())->links() }}
+            </div>
+        </div>
         </div>
     </section>
 

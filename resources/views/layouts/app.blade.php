@@ -56,8 +56,20 @@
                     <i data-lucide="sun" class="sun-icon"></i>
                     <i data-lucide="moon" class="moon-icon"></i>
                 </button>
-                <a href="#" style="font-size: 0.9rem; font-weight: 500;">Sign In</a>
-                <a href="/vehicles" class="btn btn-primary nav-auth-btn">Rent Now</a>
+                @auth
+                    <div class="flex items-center gap-4">
+                        <a href="{{ route('bookings.index') }}"
+                            style="font-size: 0.9rem; font-weight: 700; color: var(--primary);">My Bookings</a>
+                        <form action="{{ route('logout') }}" method="POST">
+                            @csrf
+                            <button type="submit" class="text-muted font-bold"
+                                style="background: none; border: none; cursor: pointer; font-size: 0.9rem;">Logout</button>
+                        </form>
+                    </div>
+                @else
+                    <a href="{{ route('login') }}" style="font-size: 0.9rem; font-weight: 500;">Sign In</a>
+                    <a href="{{ route('register') }}" class="btn btn-primary nav-auth-btn">Join Now</a>
+                @endauth
             </div>
 
             <button class="mobile-toggle" id="menuOpen">
@@ -85,7 +97,16 @@
             <a href="/vehicles">Fleet</a>
             <a href="/drivers">Our Drivers</a>
             <a href="#">About</a>
-            <a href="#" class="btn btn-primary mt-4">Sign In</a>
+            @auth
+                <a href="{{ route('bookings.index') }}">My Bookings</a>
+                <form action="{{ route('logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="btn btn-outline full-width mt-4">Logout</button>
+                </form>
+            @else
+                <a href="{{ route('login') }}" class="btn btn-outline mt-4">Sign In</a>
+                <a href="{{ route('register') }}" class="btn btn-primary">Join Now</a>
+            @endauth
         </nav>
     </div>
 

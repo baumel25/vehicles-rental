@@ -79,30 +79,21 @@
         </div>
 
         <div class="container grid" style="grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));">
-            <div class="glass-card category-card">
-                <img src="https://images.unsplash.com/photo-1494976388531-d1058494cdd8?auto=format&fit=crop&q=80&w=1000"
-                    class="category-bg">
-                <div class="category-overlay"></div>
-                <div class="category-content">
-                    <h3 class="text-3xl mb-2">Luxury Cars</h3>
-                    <p class="text-muted mb-8">Sedans, SUVs, and Convertibles from elite brands.</p>
-                    <a href="/vehicles?type=car" class="flex items-center gap-2 font-bold" style="color: var(--primary);">
-                        Explore Cars <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
-                    </a>
+            @foreach ($categories as $category)
+                <div class="glass-card category-card">
+                    <img src="{{ asset('storage/' . $category->thumbnail) }}" class="category-bg">
+                    <div class="category-overlay"></div>
+                    <div class="category-content">
+                        <h3 class="text-3xl mb-2">{{ $category->name }}</h3>
+                        <p class="text-muted mb-8">{{ $category->description }}</p>
+                        <a href="{{ route('vehicles.index', ['category' => $category->slug]) }}"
+                            class="flex items-center gap-2 font-bold" style="color: var(--primary);">
+                            Explore {{ $category->name }} <i data-lucide="arrow-right"
+                                style="width: 18px; height: 18px;"></i>
+                        </a>
+                    </div>
                 </div>
-            </div>
-            <div class="glass-card category-card">
-                <img src="https://images.unsplash.com/photo-1558981403-c5f9899a28bc?auto=format&fit=crop&q=80&w=1000"
-                    class="category-bg">
-                <div class="category-overlay"></div>
-                <div class="category-content">
-                    <h3 class="text-3xl mb-2">Sports Bikes</h3>
-                    <p class="text-muted mb-8">Unleash the speed with our range of sport and cruiser bikes.</p>
-                    <a href="/vehicles?type=bike" class="flex items-center gap-2 font-bold" style="color: var(--primary);">
-                        Explore Bikes <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
-                    </a>
-                </div>
-            </div>
+            @endforeach
             <div class="glass-card category-card">
                 <img src="https://images.unsplash.com/photo-1449965408869-eaa3f722e40d?auto=format&fit=crop&q=80&w=1000"
                     class="category-bg">
@@ -110,7 +101,8 @@
                 <div class="category-content">
                     <h3 class="text-3xl mb-2">Professional Drivers</h3>
                     <p class="text-muted mb-8">Elite chauffeurs for a safe and prestigious travel experience.</p>
-                    <a href="/drivers" class="flex items-center gap-2 font-bold" style="color: var(--primary);">
+                    <a href="{{ route('drivers.index') }}" class="flex items-center gap-2 font-bold"
+                        style="color: var(--primary);">
                         Hire Drivers <i data-lucide="arrow-right" style="width: 18px; height: 18px;"></i>
                     </a>
                 </div>
@@ -125,78 +117,43 @@
                 <h2 class="mb-4">Featured Fleet</h2>
                 <p class="text-muted">Handpicked vehicles for exceptional performance.</p>
             </div>
-            <a href="/vehicles" class="btn btn-outline">View All Fleet</a>
+            <a href="{{ route('vehicles.index') }}" class="btn btn-outline">View All Fleet</a>
         </div>
 
         <div class="container vehicle-grid">
-            @php
-                $featured = [
-                    [
-                        'id' => 1,
-                        'name' => 'BMW M8 Competition',
-                        'type' => 'Luxury Sedan',
-                        'price' => 120,
-                        'image' =>
-                            'https://images.unsplash.com/photo-1555215695-3004980ad54e?auto=format&fit=crop&q=80&w=800',
-                        'seats' => 4,
-                        'trans' => 'Auto',
-                        'fuel' => 'Petrol',
-                    ],
-                    [
-                        'id' => 2,
-                        'name' => 'Yamaha YZF R1',
-                        'type' => 'Super Sport',
-                        'price' => 80,
-                        'image' =>
-                            'https://images.unsplash.com/photo-1544636331-e26879cd4d9b?auto=format&fit=crop&q=80&w=800',
-                        'seats' => 1,
-                        'trans' => '6-Gears',
-                        'fuel' => 'Petrol',
-                    ],
-                    [
-                        'id' => 3,
-                        'name' => 'Porsche 911 Carrera',
-                        'type' => 'Sport Coupe',
-                        'price' => 180,
-                        'image' =>
-                            'https://images.unsplash.com/photo-1503376780353-7e6692767b70?auto=format&fit=crop&q=80&w=800',
-                        'seats' => 2,
-                        'trans' => 'Manual',
-                        'fuel' => 'Petrol',
-                    ],
-                ];
-            @endphp
-
-            @foreach ($featured as $vehicle)
+            @forelse ($featuredVehicles as $vehicle)
                 <div class="glass-card" style="padding: 0; overflow: hidden;">
                     <div class="card-img-wrapper">
-                        <img src="{{ $vehicle['image'] }}" alt="{{ $vehicle['name'] }}">
-                        <div class="price-tag">${{ $vehicle['price'] }} / day</div>
+                        <img src="{{ asset('storage/' . $vehicle->thumbnail) }}" alt="{{ $vehicle->name }}">
+                        <div class="price-tag">${{ number_format($vehicle->daily_rate, 0) }} / day</div>
                     </div>
                     <div class="card-content">
-                        <h3 class="card-title">{{ $vehicle['name'] }}</h3>
-                        <p class="card-subtitle">{{ $vehicle['type'] }}</p>
+                        <h3 class="card-title">{{ $vehicle->name }}</h3>
+                        <p class="card-subtitle">{{ $vehicle->category->name }}</p>
 
                         <div class="specs-grid">
                             <div class="spec-item">
                                 <i data-lucide="users"></i>
-                                <span>{{ $vehicle['seats'] }} Seats</span>
+                                <span>{{ $vehicle->seating_capacity }} Seats</span>
                             </div>
                             <div class="spec-item">
                                 <i data-lucide="zap"></i>
-                                <span>{{ $vehicle['trans'] }}</span>
+                                <span>{{ $vehicle->transmission }}</span>
                             </div>
                             <div class="spec-item">
                                 <i data-lucide="droplet"></i>
-                                <span>{{ $vehicle['fuel'] }}</span>
+                                <span>{{ $vehicle->fuel_type }}</span>
                             </div>
                         </div>
 
-                        <a href="/vehicles/{{ $vehicle['id'] }}" class="btn btn-primary full-width small-btn">Rent This
+                        <a href="{{ route('vehicles.show', $vehicle->slug) }}"
+                            class="btn btn-primary full-width small-btn">Rent This
                             Vehicle</a>
                     </div>
                 </div>
-            @endforeach
+            @empty
+                <p class="text-center text-muted p-12">No featured vehicles available at the moment.</p>
+            @endforelse
         </div>
     </section>
 @endsection

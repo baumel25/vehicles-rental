@@ -83,14 +83,14 @@
                 <label class="mb-4 block">Qualified Vehicle Categories</label>
                 <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
                     @foreach ($categories as $category)
-                        @if (!$category->parent_id)
+                        {{-- @if (!$category->parent_id) --}}
                             {{-- Only show main categories for qualification or logic choice --}}
                             <label
                                 class="flex items-center gap-3 p-4 glass-card cursor-pointer hover:bg-glass-10 transition-colors">
                                 <input type="checkbox" name="categories[]" value="{{ $category->id }}" class="w-4 h-4">
                                 <span class="text-sm font-bold">{{ $category->name }}</span>
                             </label>
-                        @endif
+                        {{-- @endif --}}
                     @endforeach
                 </div>
                 <p class="text-xs text-muted mt-4 italic">Select all vehicle types this driver is licensed and qualified to
