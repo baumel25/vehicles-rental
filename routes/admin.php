@@ -4,25 +4,33 @@ use App\Http\Controllers\Admin\AdminController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
+    // Guest Admin Routes
     Route::get('/login', [AdminController::class, 'login'])->name('admin.login');
-    Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
+    Route::post('/authenticate', [AdminController::class, 'authenticate'])->name('admin.authenticate');
 
-    // Categories
-    Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories.index');
-    Route::get('/categories/{id}', [AdminController::class, 'showCategory'])->name('admin.categories.show');
+    // Protected Admin Routes
+    Route::middleware('admin')->group(function () {
+        Route::post('/logout', [AdminController::class, 'logout'])->name('admin.logout');
 
-    // Vehicles
-    Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles.index');
-    Route::get('/vehicles/create', [AdminController::class, 'createVehicle'])->name('admin.vehicles.create');
-    Route::get('/vehicles/{id}', [AdminController::class, 'showVehicle'])->name('admin.vehicles.show');
-    Route::get('/vehicles/{id}/edit', [AdminController::class, 'editVehicle'])->name('admin.vehicles.edit');
+        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('admin.dashboard');
 
-    // Drivers
-    Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers.index');
-    Route::get('/drivers/create', [AdminController::class, 'createDriver'])->name('admin.drivers.create');
-    Route::get('/drivers/{id}', [AdminController::class, 'showDriver'])->name('admin.drivers.show');
-    Route::get('/drivers/{id}/edit', [AdminController::class, 'editDriver'])->name('admin.drivers.edit');
+        // Categories
+        Route::get('/categories', [AdminController::class, 'categories'])->name('admin.categories.index');
+        Route::get('/categories/{id}', [AdminController::class, 'showCategory'])->name('admin.categories.show');
 
-    // Reservations
-    Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations.index');
+        // Vehicles
+        Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles.index');
+        Route::get('/vehicles/create', [AdminController::class, 'createVehicle'])->name('admin.vehicles.create');
+        Route::get('/vehicles/{id}', [AdminController::class, 'showVehicle'])->name('admin.vehicles.show');
+        Route::get('/vehicles/{id}/edit', [AdminController::class, 'editVehicle'])->name('admin.vehicles.edit');
+
+        // Drivers
+        Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers.index');
+        Route::get('/drivers/create', [AdminController::class, 'createDriver'])->name('admin.drivers.create');
+        Route::get('/drivers/{id}', [AdminController::class, 'showDriver'])->name('admin.drivers.show');
+        Route::get('/drivers/{id}/edit', [AdminController::class, 'editDriver'])->name('admin.drivers.edit');
+
+        // Reservations
+        Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations.index');
+    });
 });

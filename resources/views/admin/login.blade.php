@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login | LuxDrive</title>
+    <title>Admin Access | LuxDrive Portfolio</title>
 
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -17,43 +17,73 @@
 
     <!-- Global CSS -->
     <link rel="stylesheet" href="/css/app.css">
+
+    <link rel="stylesheet" href="/css/admin-login.css">
 </head>
 
-<body class="bg-bg-main text-text-main flex items-center justify-center min-h-screen">
+<body>
+    <div class="ambient-glow-1"></div>
+    <div class="ambient-glow-2"></div>
 
-    <div class="container w-600">
-        <div class="glass-card p-12 text-center animate-slide-up">
-            <div class="logo justify-center mb-8">
-                <div class="logo-icon">
-                    <i data-lucide="shield-check" style="color: white; width: 22px; height: 22px;"></i>
-                </div>
-                <span style="font-size: 2rem;">Lux<span class="primary-span">Admin</span></span>
+    <div class="admin-login-wrapper animate-slide-up">
+        <div class="login-glass-card">
+
+            <div class="login-avatar">
+                <i data-lucide="shield-alert" style="color: var(--primary); width: 32px; height: 32px;"></i>
             </div>
 
-            <h1 class="text-2xl mb-2">Welcome Back</h1>
-            <p class="text-muted mb-12">Authorized Personnel Access Only</p>
+            <h1 class="login-title">Command Center</h1>
+            <p class="login-subtitle">Secure gateway for authorized platform administration.</p>
 
-            <form action="/admin/dashboard" class="text-left"
-                onsubmit="event.preventDefault(); window.location.href='/admin/dashboard';">
-                <div class="input-block mb-6">
-                    <label>Admin Email</label>
-                    <input type="email" placeholder="admin@luxdrive.com" required>
+            @if ($errors->any())
+                <div class="login-error">
+                    <div class="flex items-center gap-2 mb-2 font-bold">
+                        <i data-lucide="alert-circle" class="icon-sm"></i> Access Denied
+                    </div>
+                    <ul>
+                        @foreach ($errors->all() as $error)
+                            <li>{{ $error }}</li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endif
+
+            <form action="{{ route('admin.authenticate') }}" method="POST">
+                @csrf
+
+                <div class="login-input-group">
+                    <label>Administrator Email</label>
+                    <div class="login-input-wrapper">
+                        <input type="email" name="email" class="login-input" value="{{ old('email') }}"
+                            placeholder="admin@luxdrive.com" required autocomplete="email">
+                        <i data-lucide="mail"></i>
+                    </div>
                 </div>
 
-                <div class="input-block mb-12">
-                    <label>Security Key</label>
-                    <input type="password" placeholder="••••••••" required>
+                <div class="login-input-group">
+                    <label>Security Credential</label>
+                    <div class="login-input-wrapper">
+                        <input type="password" name="password" class="login-input" placeholder="••••••••" required>
+                        <i data-lucide="key"></i>
+                    </div>
                 </div>
 
-                <button type="submit" class="btn btn-primary full-width p-12">
-                    Authenticate & Access
+                <div class="login-options">
+                    <label class="login-checkbox">
+                        <input type="checkbox" name="remember" id="remember">
+                        <span>Maintain Secure Session</span>
+                    </label>
+                </div>
+
+                <button type="submit" class="btn-login">
+                    Initialize Uplink <i data-lucide="arrow-right"></i>
                 </button>
             </form>
 
-            <a href="/"
-                class="flex items-center justify-center gap-2 mt-8 text-xs text-muted font-bold hover:text-white transition-colors">
-                <i data-lucide="arrow-left" class="icon-sm"></i> Back to Primary Site
+            <a href="/" class="login-return">
+                <i data-lucide="home" class="icon-sm"></i> Return to Public Sector
             </a>
+
         </div>
     </div>
 

@@ -60,9 +60,13 @@
             </nav>
 
             <div style="margin-top: auto; padding: 2rem 1.5rem; border-top: 1px solid var(--glass-border);">
-                <a href="/" class="admin-nav-link">
-                    <i data-lucide="log-out"></i> Logout
-                </a>
+                <form action="{{ route('admin.logout') }}" method="POST">
+                    @csrf
+                    <button type="submit" class="admin-nav-link"
+                        style="width: 100%; border: none; background: none; text-align: left; cursor: pointer; color: inherit; font: inherit;">
+                        <i data-lucide="log-out"></i> Logout
+                    </button>
+                </form>
             </div>
         </aside>
 
