@@ -1,77 +1,93 @@
 @extends('layouts.admin')
 
-@section('admin_title', 'Update Driver')
+@section('admin_title', 'Edit Driver')
 
 @section('admin_content')
     <div class="mb-12">
-        <a href="/admin/drivers/1" class="flex items-center gap-2 text-muted mb-6 font-bold">
-            <i data-lucide="arrow-left" class="icon-sm"></i> Back to Profile
+        <a href="{{ route('admin.drivers.index') }}" class="flex items-center gap-2 text-muted mb-6 font-bold">
+            <i data-lucide="arrow-left" class="icon-sm"></i> Back to Registry
         </a>
-        <h1 class="text-2xl font-extrabold">Edit Chauffeur Profile</h1>
-        <p class="text-muted mt-2">Modifying: <span class="text-primary font-bold">John Doe</span></p>
+        <h1 class="text-2xl font-extrabold">Edit Profile: {{ $driver->name }}</h1>
+        <p class="text-muted mt-2">Update professional credentials and chauffeur status.</p>
     </div>
 
-    <form class="admin-detail-grid">
-        <!-- Sidebar: Photo & Stats -->
+    <form class="admin-detail-grid" action="{{ route('admin.drivers.update', $driver->id) }}" method="POST"
+        enctype="multipart/form-data">
+        @csrf
+        @method('PUT')
+        <!-- Sidebar: Image & Status -->
         <div class="flex flex-col gap-8">
             <div class="glass-card p-10 text-center">
-                <img src="https://i.pravatar.cc/150?u=john"
-                    style="width: 120px; height: 120px; border-radius: 50%; border: 3px solid var(--primary); margin: 0 auto 1.5rem; object-fit: cover;">
+                @if ($driver->profile_picture)
+                    <img src="{{ asset('storage/' . $driver->profile_picture) }}"
+                        style="width: 120px; height: 120px; border-radius: 50%; object-fit: cover; margin: 0 auto 1.5rem; border: 3px solid var(--primary);">
+                @else
+                    <i data-lucide="user-circle" class="mx-auto mb-4 text-muted" style="width: 64px; height: 64px;"></i>
+                @endif
                 <h4 class="text-sm font-bold mb-4">Update Profile Photo</h4>
-                <button type="button" class="btn btn-outline full-width">Replace Photo</button>
+                <div class="admin-form-group">
+                    <input type="file" name="profile_picture" class="admin-form-control">
+                </div>
             </div>
 
             <div class="glass-card p-10">
-                <h4 class="text-sm font-bold mb-6">Availability & Pricing</h4>
+                <h4 class="text-sm font-bold mb-6">Availability & Metrics</h4>
                 <div class="admin-form-group">
-                    <label>Daily Service Rate ($)</label>
-                    <input type="number" class="admin-form-control" value="40.00">
+                    <label>Employment Status</label>
+                    <select name="status" class="admin-form-control">
+                        <option value="Available" {{ $driver->status == 'Available' ? 'selected' : '' }}>Available</option>
+                        <option value="On Trip" {{ $driver->status == 'On Trip' ? 'selected' : '' }}>On Trip</option>
+                        <option value="Off Duty" {{ $driver->status == 'Off Duty' ? 'selected' : '' }}>Off Duty</option>
+                    </select>
                 </div>
                 <div class="admin-form-group">
-                    <label>Availability Status</label>
-                    <div class="search-field">
-                        <select class="admin-form-control">
-                            <option value="available" selected>Available</option>
-                            <option value="on-task">On Task</option>
-                            <option value="off-duty">Off Duty</option>
-                        </select>
-                    </div>
+                    <label>Daily Service Rate ($)</label>
+                    <input type="number" name="base_rate" class="admin-form-control" value="{{ $driver->base_rate }}"
+                        step="0.01" required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Years of Experience</label>
+                    <input type="number" name="experience_years" class="admin-form-control"
+                        value="{{ $driver->experience_years }}" min="0" required>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content: Personal Info & Experience -->
+        <!-- Main Content: Credentials & Bio -->
         <div class="glass-card p-12">
-            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="grid" style="grid-template-columns: 1fr; gap: 2rem;">
                 <div class="admin-form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="admin-form-control" value="John Doe">
-                </div>
-                <div class="admin-form-group">
-                    <label>Email Address</label>
-                    <input type="email" class="admin-form-control" value="john.doe@luxdrive.com">
+                    <label>Full Legal Name</label>
+                    <input type="text" name="name" class="admin-form-control" value="{{ $driver->name }}" required>
                 </div>
             </div>
 
             <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <div class="admin-form-group">
-                    <label>Years of Experience</label>
-                    <input type="text" class="admin-form-control" value="8 Years">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" class="admin-form-control" value="{{ $driver->phone }}" required>
                 </div>
                 <div class="admin-form-group">
-                    <label>Specialty</label>
-                    <input type="text" class="admin-form-control" value="VIP Escort, Luxury Sedans">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="admin-form-control" value="{{ $driver->email }}">
                 </div>
             </div>
 
             <div class="admin-form-group">
+                <label>Professional License Number</label>
+                <input type="text" name="license_number" class="admin-form-control"
+                    value="{{ $driver->license_number }}" required>
+            </div>
+
+            <div class="admin-form-group">
                 <label>Professional Biography</label>
-                <textarea class="admin-form-control" rows="5">John is a veteran chauffeur specializing in high-profile luxury transport. With over 8 years of experience navigating the city's complex routes.</textarea>
+                <textarea name="biography" class="admin-form-control" rows="5">{{ $driver->biography }}</textarea>
             </div>
 
             <div class="flex gap-4 mt-8 pt-8" style="border-top: 1px solid var(--glass-border);">
-                <button type="button" class="btn btn-outline" style="padding: 1rem 2.5rem;">Discard Edits</button>
-                <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Save Profile</button>
+                <a href="{{ route('admin.drivers.index') }}" class="btn btn-outline"
+                    style="padding: 1rem 2.5rem;">Cancel</a>
+                <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Save Changes</button>
             </div>
         </div>
     </form>

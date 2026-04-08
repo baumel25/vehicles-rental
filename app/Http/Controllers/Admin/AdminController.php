@@ -13,27 +13,6 @@ class AdminController extends Controller
         return view('admin.dashboard');
     }
 
-    // Drivers
-    public function drivers()
-    {
-        return view('admin.drivers.index');
-    }
-
-    public function createDriver()
-    {
-        return view('admin.drivers.create');
-    }
-
-    public function showDriver($id)
-    {
-        return view('admin.drivers.show', ['id' => $id]);
-    }
-
-    public function editDriver($id)
-    {
-        return view('admin.drivers.edit', ['id' => $id]);
-    }
-
     // Reservations
     public function reservations()
     {

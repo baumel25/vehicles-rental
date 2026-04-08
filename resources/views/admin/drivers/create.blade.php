@@ -4,76 +4,85 @@
 
 @section('admin_content')
     <div class="mb-12">
-        <a href="/admin/drivers" class="flex items-center gap-2 text-muted mb-6 font-bold">
+        <a href="{{ route('admin.drivers.index') }}" class="flex items-center gap-2 text-muted mb-6 font-bold">
             <i data-lucide="arrow-left" class="icon-sm"></i> Back to Registry
         </a>
-        <h1 class="text-2xl font-extrabold">Onboard New Chauffeur</h1>
-        <p class="text-muted mt-2">Add a professional driver to your service network.</p>
+        <h1 class="text-2xl font-extrabold">Add Professional Driver</h1>
+        <p class="text-muted mt-2">Create a new chauffeur profile for the rental service.</p>
     </div>
 
-    <form class="admin-detail-grid">
-        <!-- Sidebar: Photo & Stats -->
+    <form class="admin-detail-grid" action="{{ route('admin.drivers.store') }}" method="POST" enctype="multipart/form-data">
+        @csrf
+        <!-- Sidebar: Image & Status -->
         <div class="flex flex-col gap-8">
             <div class="glass-card p-10 text-center">
-                <div
-                    style="width: 120px; height: 120px; border-radius: 50%; background: rgba(255,255,255,0.05); border: 2px dashed var(--glass-border); margin: 0 auto 1.5rem; display: flex; align-items: center; justify-content: center;">
-                    <i data-lucide="user" class="text-muted" style="width: 48px; height: 48px;"></i>
-                </div>
+                <i data-lucide="user-circle" class="mx-auto mb-4 text-muted" style="width: 64px; height: 64px;"></i>
                 <h4 class="text-sm font-bold mb-4">Profile Photo</h4>
-                <button type="button" class="btn btn-outline full-width">Upload Photo</button>
+                <div class="admin-form-group">
+                    <input type="file" name="profile_picture" class="admin-form-control">
+                </div>
             </div>
 
             <div class="glass-card p-10">
-                <h4 class="text-sm font-bold mb-6">Availability & Rating</h4>
+                <h4 class="text-sm font-bold mb-6">Availability & Metrics</h4>
                 <div class="admin-form-group">
-                    <label>Daily Service Rate ($)</label>
-                    <input type="number" class="admin-form-control" placeholder="40.00">
+                    <label>Employment Status</label>
+                    <select name="status" class="admin-form-control">
+                        <option value="Available">Available</option>
+                        <option value="On Trip">On Trip</option>
+                        <option value="Off Duty">Off Duty</option>
+                    </select>
                 </div>
                 <div class="admin-form-group">
-                    <label>Availability Status</label>
-                    <div class="search-field">
-                        <select class="admin-form-control">
-                            <option value="available">Available</option>
-                            <option value="on-task">On Task</option>
-                            <option value="off-duty">Off Duty</option>
-                        </select>
-                    </div>
+                    <label>Daily Service Rate ($)</label>
+                    <input type="number" name="base_rate" class="admin-form-control" placeholder="50.00" step="0.01"
+                        required>
+                </div>
+                <div class="admin-form-group">
+                    <label>Years of Experience</label>
+                    <input type="number" name="experience_years" class="admin-form-control" value="1" min="0"
+                        required>
                 </div>
             </div>
         </div>
 
-        <!-- Main Content: Personal Info & Experience -->
+        <!-- Main Content: Credentials & Bio -->
         <div class="glass-card p-12">
-            <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
+            <div class="grid" style="grid-template-columns: 1fr; gap: 2rem;">
                 <div class="admin-form-group">
-                    <label>Full Name</label>
-                    <input type="text" class="admin-form-control" placeholder="e.g. John Doe">
-                </div>
-                <div class="admin-form-group">
-                    <label>Email Address</label>
-                    <input type="email" class="admin-form-control" placeholder="john@example.com">
+                    <label>Full Legal Name</label>
+                    <input type="text" name="name" class="admin-form-control" placeholder="e.g. Johnathan Doe"
+                        required>
                 </div>
             </div>
 
             <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">
                 <div class="admin-form-group">
-                    <label>Years of Experience</label>
-                    <input type="text" class="admin-form-control" placeholder="e.g. 8 Years">
+                    <label>Phone Number</label>
+                    <input type="text" name="phone" class="admin-form-control" placeholder="+1 (555) 000-0000"
+                        required>
                 </div>
                 <div class="admin-form-group">
-                    <label>Specialty</label>
-                    <input type="text" class="admin-form-control" placeholder="e.g. VIP Escort, Luxury Sedans">
+                    <label>Email Address</label>
+                    <input type="email" name="email" class="admin-form-control" placeholder="john@example.com">
                 </div>
             </div>
 
             <div class="admin-form-group">
+                <label>Professional License Number</label>
+                <input type="text" name="license_number" class="admin-form-control" placeholder="DL-123456789" required>
+            </div>
+
+            <div class="admin-form-group">
                 <label>Professional Biography</label>
-                <textarea class="admin-form-control" rows="5" placeholder="Detailed professional background..."></textarea>
+                <textarea name="biography" class="admin-form-control" rows="5"
+                    placeholder="Highlight driver skills, specialties, and language proficiency..."></textarea>
             </div>
 
             <div class="flex gap-4 mt-8 pt-8" style="border-top: 1px solid var(--glass-border);">
-                <button type="button" class="btn btn-outline" style="padding: 1rem 2.5rem;">Cancel</button>
-                <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Register Driver</button>
+                <a href="{{ route('admin.drivers.index') }}" class="btn btn-outline"
+                    style="padding: 1rem 2.5rem;">Discard</a>
+                <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem;">Register Chauffeur</button>
             </div>
         </div>
     </form>

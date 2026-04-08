@@ -26,73 +26,63 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $drivers = [
-                        [
-                            'id' => 1,
-                            'name' => 'John Doe',
-                            'spec' => 'Luxury Sedans',
-                            'exp' => '8 Yrs',
-                            'rating' => 4.9,
-                            'status' => 'On Task',
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => 'Sarah Smith',
-                            'spec' => 'Sports Bikes',
-                            'exp' => '5 Yrs',
-                            'rating' => 4.8,
-                            'status' => 'Available',
-                        ],
-                        [
-                            'id' => 3,
-                            'name' => 'Michael Chen',
-                            'spec' => 'VIP Escort',
-                            'exp' => '12 Yrs',
-                            'rating' => 5.0,
-                            'status' => 'Available',
-                        ],
-                        [
-                            'id' => 4,
-                            'name' => 'Elena Rodriguez',
-                            'spec' => 'City Touring',
-                            'exp' => '7 Yrs',
-                            'rating' => 4.7,
-                            'status' => 'Off Duty',
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($drivers as $driver)
+                @forelse ($drivers as $driver)
                     <tr>
-                        <td class="font-bold">{{ $driver['name'] }}</td>
-                        <td class="text-muted">{{ $driver['spec'] }}</td>
-                        <td class="font-bold">{{ $driver['exp'] }}</td>
-                        <td class="font-bold" style="color: var(--secondary);">{{ $driver['rating'] }} <i data-lucide="star"
-                                style="width: 12px; height: 12px; fill: currentColor; display: inline;"></i></td>
+                        <td class="font-bold">
+                            <div class="flex items-center gap-3">
+                                @if ($driver->profile_picture)
+                                    <img src="{{ asset('storage/' . $driver->profile_picture) }}"
+                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 50%;">
+                                @else
+                                    <div
+                                        style="width: 40px; height: 40px; border-radius: 50%; background: var(--glass-05); display: flex; align-items: center; justify-content: center;">
+                                        <i data-lucide="user" class="icon-sm"></i>
+                                    </div>
+                                @endif
+                                {{ $driver->name }}
+                            </div>
+                        </td>
+                        <td class="text-muted">{{ $driver->license_number }}</td>
+                        <td class="font-bold">{{ $driver->experience_years }} Yrs</td>
+                        <td class="font-bold" style="color: var(--secondary);">$ {{ number_format($driver->base_rate, 2) }}
+                        </td>
                         <td>
                             <span class="badge"
                                 style="
-                            @if ($driver['status'] == 'Available') background: rgba(34, 197, 94, 0.1); color: #22c55e;
-                            @elseif($driver['status'] == 'On Task') background: rgba(59, 130, 246, 0.1); color: #3b82f6;
+                            @if ($driver->status == 'Available') background: rgba(34, 197, 94, 0.1); color: #22c55e;
+                            @elseif($driver->status == 'On Trip') background: rgba(59, 130, 246, 0.1); color: #3b82f6;
                             @else background: rgba(156, 163, 175, 0.1); color: #9ca3af; @endif
                             margin: 0; padding: 0.3rem 0.8rem; font-size: 0.7rem; border: none;
-                        ">{{ $driver['status'] }}</span>
+                        ">{{ $driver->status }}</span>
                         </td>
                         <td>
                             <div class="flex gap-2">
-                                <a href="/admin/drivers/{{ $driver['id'] }}" class="btn-info"
+                                <a href="{{ route('admin.drivers.show', $driver->id) }}" class="btn-info"
                                     style="color: var(--primary);">
                                     <i data-lucide="eye" class="icon-sm"></i>
                                 </a>
-                                <a href="/admin/drivers/{{ $driver['id'] }}/edit" class="btn-info"
+                                <a href="{{ route('admin.drivers.edit', $driver->id) }}" class="btn-info"
                                     style="color: var(--text-muted);">
                                     <i data-lucide="edit-3" class="icon-sm"></i>
                                 </a>
+                                <form action="{{ route('admin.drivers.delete', $driver->id) }}" method="POST"
+                                    onsubmit="return confirm('Delete this driver registration?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-info"
+                                        style="color: #ef4444; background: transparent; border: none; cursor: pointer;">
+                                        <i data-lucide="trash-2" class="icon-sm"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center p-10 text-muted">No drivers registered in the registry yet.
+                        </td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VehicleController;
+use App\Http\Controllers\Admin\DriverController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -35,10 +36,13 @@ Route::prefix('admin')->group(function () {
         Route::delete('/vehicles/images/{imageId}', [VehicleController::class, 'removeImage'])->name('admin.vehicles.removeImage');
 
         // Drivers
-        Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers.index');
-        Route::get('/drivers/create', [AdminController::class, 'createDriver'])->name('admin.drivers.create');
-        Route::get('/drivers/{id}', [AdminController::class, 'showDriver'])->name('admin.drivers.show');
-        Route::get('/drivers/{id}/edit', [AdminController::class, 'editDriver'])->name('admin.drivers.edit');
+        Route::get('/drivers', [DriverController::class, 'index'])->name('admin.drivers.index');
+        Route::get('/drivers/create', [DriverController::class, 'create'])->name('admin.drivers.create');
+        Route::post('/drivers', [DriverController::class, 'store'])->name('admin.drivers.store');
+        Route::get('/drivers/{id}', [DriverController::class, 'show'])->name('admin.drivers.show');
+        Route::get('/drivers/{id}/edit', [DriverController::class, 'edit'])->name('admin.drivers.edit');
+        Route::put('/drivers/{id}', [DriverController::class, 'update'])->name('admin.drivers.update');
+        Route::delete('/drivers/{id}', [DriverController::class, 'destroy'])->name('admin.drivers.delete');
 
         // Reservations
         Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations.index');
