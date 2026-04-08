@@ -105,4 +105,80 @@
             </div>
         </div>
     </div>
+
+    <div class="glass-card mt-12 p-12">
+        <div class="flex justify-between items-center mb-10">
+            <div>
+                <h3 class="text-xl font-extrabold">Reservation History</h3>
+                <p class="text-xs text-muted mt-1 uppercase tracking-widest font-bold">Past and upcoming bookings for this
+                    vehicle</p>
+            </div>
+            <div class="qty-badge bg-glass-10 px-4 py-2 rounded-lg font-bold text-xs uppercase">
+                <i data-lucide="info" class="icon-xs inline-block mr-1"></i>
+                {{ $vehicle->reservations->count() }} Total Bookings
+            </div>
+        </div>
+
+        <div style="overflow-x: auto;">
+            <table class="admin-table">
+                <thead>
+                    <tr>
+                        <th>Date Requested</th>
+                        <th>Customer</th>
+                        <th>Chauffeur</th>
+                        <th>Rental Period</th>
+                        <th>Value</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @forelse($vehicle->reservations as $res)
+                        <tr>
+                            <td class="text-xs text-muted">{{ $res->created_at->format('M d, Y') }}</td>
+                            <td>
+                                <div class="font-bold text-sm">{{ $res->user->name }}</div>
+                                <div class="text-[10px] text-muted">{{ $res->user->email }}</div>
+                            </td>
+                            <td>
+                                @if ($res->driver)
+                                    <span class="badge text-[10px]"
+                                        style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary);">{{ $res->driver->name }}</span>
+                                @else
+                                    <span class="text-[10px] text-muted italic">Self-Drive</span>
+                                @endif
+                            </td>
+                            <td class="text-xs font-bold">{{ $res->pickup_date->format('M d') }} -
+                                {{ $res->return_date->format('M d, Y') }}</td>
+                            <td class="font-extrabold text-sm">${{ number_format($res->total_price, 0) }}</td>
+                            <td>
+                                @php
+                                    $sClass = match ($res->status) {
+                                        'Pending' => 'bg-amber-500/20 text-amber-500',
+                                        'Confirmed' => 'bg-green-500/20 text-green-500',
+                                        'Cancelled' => 'bg-red-500/20 text-red-500',
+                                        'Completed' => 'bg-blue-500/20 text-blue-500',
+                                        default => 'bg-blue-500/20 text-blue-500',
+                                    };
+                                @endphp
+                                <span class="px-2 py-1 rounded-full text-[9px] font-bold {{ $sClass }}">
+                                    {{ $res->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <a href="{{ route('admin.reservations.show', $res->id) }}" class="btn-icon">
+                                    <i data-lucide="eye" style="width: 14px; height: 14px;"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center p-12 text-muted italic">No reservation history for this
+                                vehicle.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection

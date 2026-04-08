@@ -5,6 +5,7 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\DriverController;
+use App\Http\Controllers\Admin\ReservationController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -45,6 +46,9 @@ Route::prefix('admin')->group(function () {
         Route::delete('/drivers/{id}', [DriverController::class, 'destroy'])->name('admin.drivers.delete');
 
         // Reservations
-        Route::get('/reservations', [AdminController::class, 'reservations'])->name('admin.reservations.index');
+        Route::get('/reservations', [ReservationController::class, 'index'])->name('admin.reservations.index');
+        Route::get('/reservations/{id}', [ReservationController::class, 'show'])->name('admin.reservations.show');
+        Route::put('/reservations/{id}/status', [ReservationController::class, 'updateStatus'])->name('admin.reservations.updateStatus');
+        Route::delete('/reservations/{id}', [ReservationController::class, 'destroy'])->name('admin.reservations.delete');
     });
 });

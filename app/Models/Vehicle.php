@@ -32,7 +32,7 @@ class Vehicle extends Model
 
         static::creating(function ($vehicle) {
             if (empty($vehicle->slug)) {
-                $vehicle->slug = Str::slug($vehicle->name) . '-' . Str::random(5);
+                $vehicle->slug = Str::slug($vehicle->name).'-'.Str::random(5);
             }
         });
     }
@@ -50,5 +50,10 @@ class Vehicle extends Model
     public function images()
     {
         return $this->hasMany(VehicleImage::class);
+    }
+
+    public function reservations()
+    {
+        return $this->hasMany(Reservation::class);
     }
 }

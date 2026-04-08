@@ -1,102 +1,103 @@
 @extends('layouts.admin')
 
-@section('admin_title', 'Master Reservations')
+@section('admin_title', 'Reservations Management')
 
 @section('admin_content')
-    <div class="mb-8 flex justify-between items-center">
+    <div class="flex justify-between items-center mb-10">
         <div>
-            <h3 class="text-xl font-bold">Booking History</h3>
-            <p class="text-xs text-muted font-bold mt-2">Monitor and manage all customer reservations</p>
-        </div>
-        <div class="flex gap-4">
-            <button class="btn btn-outline" style="padding: 0.8rem 1.5rem; font-size: 0.85rem;">
-                <i data-lucide="download" class="icon-sm" style="margin-right: 0.5rem;"></i> Export CSV
-            </button>
+            <h1 class="text-2xl font-extrabold mb-1">Reservations</h1>
+            <p class="text-muted text-sm">Manage customer bookings and luxury fleet schedule.</p>
         </div>
     </div>
 
-    <div class="table-container">
-        <table class="admin-table">
-            <thead>
-                <tr>
-                    <th>Ref ID</th>
-                    <th>Customer</th>
-                    <th>Vehicle</th>
-                    <th>Pick-up</th>
-                    <th>Days</th>
-                    <th>Total</th>
-                    <th>Status</th>
-                    <th>Action</th>
-                </tr>
-            </thead>
-            <tbody>
-                @php
-                    $reservations = [
-                        [
-                            'id' => 'LX-20941',
-                            'user' => 'Alex Morgan',
-                            'vehicle' => 'BMW M8',
-                            'date' => 'Oct 24, 2026',
-                            'days' => 3,
-                            'total' => '$480.00',
-                            'status' => 'Confirmed',
-                        ],
-                        [
-                            'id' => 'LX-20942',
-                            'user' => 'Sarah Connor',
-                            'vehicle' => 'Yamaha R1',
-                            'date' => 'Oct 23, 2026',
-                            'days' => 2,
-                            'total' => '$160.00',
-                            'status' => 'Pending',
-                        ],
-                        [
-                            'id' => 'LX-20943',
-                            'user' => 'John Wick',
-                            'vehicle' => 'Porsche 911',
-                            'date' => 'Oct 22, 2026',
-                            'days' => 3,
-                            'total' => '$540.00',
-                            'status' => 'Completed',
-                        ],
-                        [
-                            'id' => 'LX-20944',
-                            'user' => 'Ellen Ripley',
-                            'vehicle' => 'G-Wagon',
-                            'date' => 'Oct 21, 2026',
-                            'days' => 3,
-                            'total' => '$750.00',
-                            'status' => 'Cancelled',
-                        ],
-                    ];
-                @endphp
+    @if (session('success'))
+        <div class="bg-green-500/10 border border-green-500/50 p-4 rounded-xl mb-8 flex items-center gap-3 animate-fade-in">
+            <i data-lucide="check-circle" class="text-green-500 icon-sm"></i>
+            <span class="text-green-500 font-bold text-sm">{{ session('success') }}</span>
+        </div>
+    @endif
 
-                @foreach ($reservations as $res)
+    <div class="glass-card p-0" style="overflow: hidden;">
+        <div style="overflow-x: auto;">
+            <table class="admin-table">
+                <thead>
                     <tr>
-                        <td class="font-bold text-primary">#{{ $res['id'] }}</td>
-                        <td class="font-bold">{{ $res['user'] }}</td>
-                        <td class="text-muted">{{ $res['vehicle'] }}</td>
-                        <td>{{ $res['date'] }}</td>
-                        <td>{{ $res['days'] }} Days</td>
-                        <td class="font-bold">{{ $res['total'] }}</td>
-                        <td>
-                            <span class="badge"
-                                style="
-                            @if ($res['status'] == 'Confirmed') background: rgba(59, 130, 246, 0.1); color: #3b82f6;
-                            @elseif($res['status'] == 'Pending') background: rgba(245, 158, 11, 0.1); color: #f59e0b;
-                            @elseif($res['status'] == 'Completed') background: rgba(16, 185, 129, 0.1); color: #10b981;
-                            @else background: rgba(239, 68, 68, 0.1); color: #ef4444; @endif
-                            margin: 0; padding: 0.3rem 0.8rem; font-size: 0.7rem; border: none;
-                        ">{{ $res['status'] }}</span>
-                        </td>
-                        <td>
-                            <button style="background: none; border: none; color: var(--text-muted); cursor: pointer;">
-                                <i data-lucide="settings-2" class="icon-sm"></i>
-                            </button>
-                        </td>
+                        <th>ID</th>
+                        <th>Customer</th>
+                        <th>Vehicle</th>
+                        <th>Chauffeur</th>
+                        <th>Period</th>
+                        <th>Total</th>
+                        <th>Status</th>
+                        <th>Actions</th>
                     </tr>
-                @endforeach
-            </tbody>
-        </table>
+                </thead>
+                <tbody>
+                    @forelse($reservations as $reservation)
+                        <tr>
+                            <td><span
+                                    class="font-bold text-xs uppercase">#RE{{ str_pad($reservation->id, 4, '0', STR_PAD_LEFT) }}</span>
+                            </td>
+                            <td>
+                                <div class="font-bold text-sm">{{ $reservation->user->name }}</div>
+                                <div class="text-xs text-muted">{{ $reservation->user->email }}</div>
+                            </td>
+                            <td>
+                                <div class="flex items-center gap-2">
+                                    <img src="{{ asset('storage/' . $reservation->vehicle->thumbnail) }}"
+                                        style="width: 40px; height: 30px; border-radius: 4px; object-fit: cover;">
+                                    <div class="text-xs font-bold">{{ $reservation->vehicle->name }}</div>
+                                </div>
+                            </td>
+                            <td>
+                                @if ($reservation->driver)
+                                    <span class="badge text-xs"
+                                        style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary);">{{ $reservation->driver->name }}</span>
+                                @else
+                                    <span class="text-xs text-muted italic">Self-Drive</span>
+                                @endif
+                            </td>
+                            <td>
+                                <div class="text-xs font-bold">{{ $reservation->pickup_date->format('M d') }} -
+                                    {{ $reservation->return_date->format('M d, Y') }}</div>
+                            </td>
+                            <td><span
+                                    class="text-sm font-extrabold">${{ number_format($reservation->total_price, 0) }}</span>
+                            </td>
+                            <td>
+                                @php
+                                    $statusClass = match ($reservation->status) {
+                                        'Pending' => 'bg-amber-500/20 text-amber-500',
+                                        'Confirmed' => 'bg-green-500/20 text-green-500',
+                                        'Cancelled' => 'bg-red-500/20 text-red-500',
+                                        'Completed' => 'bg-blue-500/20 text-blue-500',
+                                        default => 'bg-blue-500/20 text-blue-500',
+                                    };
+                                @endphp
+                                <span class="px-2 py-1 rounded-full text-[10px] font-bold {{ $statusClass }}">
+                                    {{ $reservation->status }}
+                                </span>
+                            </td>
+                            <td>
+                                <div class="flex gap-2">
+                                    <a href="{{ route('admin.reservations.show', $reservation->id) }}" class="btn-icon"
+                                        title="View Reservation">
+                                        <i data-lucide="eye" style="width: 16px; height: 16px;"></i>
+                                    </a>
+                                </div>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="8" class="text-center p-12 text-muted italic">No reservations found.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div class="mt-8">
+        {{ $reservations->links() }}
     </div>
 @endsection

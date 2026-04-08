@@ -69,7 +69,9 @@ class VehicleController extends Controller
 
     public function show($id)
     {
-        $vehicle = Vehicle::with(['category', 'subCategory', 'images'])->findOrFail($id);
+        $vehicle = Vehicle::with(['category', 'subCategory', 'images', 'reservations' => function($q) {
+            $q->with(['user', 'driver'])->latest();
+        }])->findOrFail($id);
         return view('admin.vehicles.show', compact('vehicle'));
     }
 
