@@ -26,72 +26,61 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $vehicles = [
-                        [
-                            'id' => 1,
-                            'name' => 'BMW M8 Competition',
-                            'type' => 'Luxury Sedan',
-                            'price' => '$120',
-                            'qty' => 3,
-                            'status' => 'Available',
-                        ],
-                        [
-                            'id' => 2,
-                            'name' => 'Yamaha YZF R1',
-                            'type' => 'Super Sport',
-                            'price' => '$80',
-                            'qty' => 5,
-                            'status' => 'Available',
-                        ],
-                        [
-                            'id' => 3,
-                            'name' => 'Porsche 911 Carrera',
-                            'type' => 'Sport Coupe',
-                            'price' => '$180',
-                            'qty' => 2,
-                            'status' => 'Low Stock',
-                        ],
-                        [
-                            'id' => 4,
-                            'name' => 'Mercedes G-Wagon',
-                            'type' => 'Luxury SUV',
-                            'price' => '$250',
-                            'qty' => 0,
-                            'status' => 'Out of Stock',
-                        ],
-                    ];
-                @endphp
-
-                @foreach ($vehicles as $vehicle)
+                @forelse ($vehicles as $vehicle)
                     <tr>
-                        <td class="font-bold">{{ $vehicle['name'] }}</td>
-                        <td class="text-muted">{{ $vehicle['type'] }}</td>
-                        <td class="font-bold">{{ $vehicle['price'] }}</td>
-                        <td class="font-bold">{{ $vehicle['qty'] }} Units</td>
+                        <td class="font-bold">
+                            <div class="flex items-center gap-3">
+                                @if ($vehicle->thumbnail)
+                                    <img src="{{ asset('storage/' . $vehicle->thumbnail) }}"
+                                        style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
+                                @endif
+                                {{ $vehicle->name }}
+                            </div>
+                        </td>
+                        <td class="text-muted">
+                            {{ $vehicle->category->name }}
+                            @if ($vehicle->subCategory)
+                                <br><small>{{ $vehicle->subCategory->name }}</small>
+                            @endif
+                        </td>
+                        <td class="font-bold">${{ number_format($vehicle->daily_rate, 2) }}</td>
+                        <td class="font-bold">{{ $vehicle->quantity }} Units</td>
                         <td>
                             <span class="badge"
                                 style="
-                            @if ($vehicle['status'] == 'Available') background: rgba(34, 197, 94, 0.1); color: #22c55e;
-                            @elseif($vehicle['status'] == 'Low Stock') background: rgba(245, 158, 11, 0.1); color: #f59e0b;
+                            @if ($vehicle->status == 'Available') background: rgba(34, 197, 94, 0.1); color: #22c55e;
+                            @elseif($vehicle->status == 'Maintenance') background: rgba(245, 158, 11, 0.1); color: #f59e0b;
                             @else background: rgba(239, 68, 68, 0.1); color: #ef4444; @endif
                             margin: 0; padding: 0.3rem 0.8rem; font-size: 0.7rem; border: none;
-                        ">{{ $vehicle['status'] }}</span>
+                        ">{{ $vehicle->status }}</span>
                         </td>
                         <td>
                             <div class="flex gap-2">
-                                <a href="/admin/vehicles/{{ $vehicle['id'] }}" class="btn-info"
+                                <a href="{{ route('admin.vehicles.show', $vehicle->id) }}" class="btn-info"
                                     style="color: var(--primary);">
                                     <i data-lucide="eye" class="icon-sm"></i>
                                 </a>
-                                <a href="/admin/vehicles/{{ $vehicle['id'] }}/edit" class="btn-info"
+                                <a href="{{ route('admin.vehicles.edit', $vehicle->id) }}" class="btn-info"
                                     style="color: var(--text-muted);">
                                     <i data-lucide="edit-3" class="icon-sm"></i>
                                 </a>
+                                <form action="{{ route('admin.vehicles.delete', $vehicle->id) }}" method="POST"
+                                    onsubmit="return confirm('Remove this vehicle from the fleet?')">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn-info"
+                                        style="color: #ef4444; background: transparent; border: none; cursor: pointer;">
+                                        <i data-lucide="trash-2" class="icon-sm"></i>
+                                    </button>
+                                </form>
                             </div>
                         </td>
                     </tr>
-                @endforeach
+                @empty
+                    <tr>
+                        <td colspan="6" class="text-center p-10 text-muted">No vehicles registered in the fleet yet.</td>
+                    </tr>
+                @endforelse
             </tbody>
         </table>
     </div>

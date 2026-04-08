@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Category;
+use Illuminate\Http\Request;
 
 class AdminController extends Controller
 {
@@ -11,31 +11,6 @@ class AdminController extends Controller
     public function dashboard()
     {
         return view('admin.dashboard');
-    }
-
-    // Vehicles
-    public function vehicles()
-    {
-        return view('admin.vehicles.index');
-    }
-
-    public function createVehicle()
-    {
-        $categories = Category::whereNull('parent_id')->with('children')->get();
-
-        return view('admin.vehicles.create', compact('categories'));
-    }
-
-    public function showVehicle($id)
-    {
-        return view('admin.vehicles.show', ['id' => $id]);
-    }
-
-    public function editVehicle($id)
-    {
-        $categories = Category::whereNull('parent_id')->with('children')->get();
-
-        return view('admin.vehicles.edit', ['id' => $id, 'categories' => $categories]);
     }
 
     // Drivers

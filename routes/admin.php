@@ -3,6 +3,7 @@
 use App\Http\Controllers\Admin\AdminController;
 use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\CategoryController;
+use App\Http\Controllers\Admin\VehicleController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
@@ -24,10 +25,14 @@ Route::prefix('admin')->group(function () {
         Route::delete('/categories/{id}', [CategoryController::class, 'destroy'])->name('admin.categories.delete');
 
         // Vehicles
-        Route::get('/vehicles', [AdminController::class, 'vehicles'])->name('admin.vehicles.index');
-        Route::get('/vehicles/create', [AdminController::class, 'createVehicle'])->name('admin.vehicles.create');
-        Route::get('/vehicles/{id}', [AdminController::class, 'showVehicle'])->name('admin.vehicles.show');
-        Route::get('/vehicles/{id}/edit', [AdminController::class, 'editVehicle'])->name('admin.vehicles.edit');
+        Route::get('/vehicles', [VehicleController::class, 'index'])->name('admin.vehicles.index');
+        Route::get('/vehicles/create', [VehicleController::class, 'create'])->name('admin.vehicles.create');
+        Route::post('/vehicles', [VehicleController::class, 'store'])->name('admin.vehicles.store');
+        Route::get('/vehicles/{id}', [VehicleController::class, 'show'])->name('admin.vehicles.show');
+        Route::get('/vehicles/{id}/edit', [VehicleController::class, 'edit'])->name('admin.vehicles.edit');
+        Route::put('/vehicles/{id}', [VehicleController::class, 'update'])->name('admin.vehicles.update');
+        Route::delete('/vehicles/{id}', [VehicleController::class, 'destroy'])->name('admin.vehicles.delete');
+        Route::delete('/vehicles/images/{imageId}', [VehicleController::class, 'removeImage'])->name('admin.vehicles.removeImage');
 
         // Drivers
         Route::get('/drivers', [AdminController::class, 'drivers'])->name('admin.drivers.index');
