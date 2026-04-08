@@ -38,4 +38,9 @@ class Category extends Model
     {
         return $this->hasMany(Category::class, 'parent_id');
     }
+
+    public function drivers()
+    {
+        return $this->belongsToMany(Driver::class);
+    }
 }

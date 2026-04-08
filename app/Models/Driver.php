@@ -20,4 +20,9 @@ class Driver extends Model
         'biography',
         'profile_picture',
     ];
+
+    public function categories()
+    {
+        return $this->belongsToMany(Category::class);
+    }
 }

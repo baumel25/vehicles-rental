@@ -50,6 +50,21 @@
                 </div>
             </div>
 
+            <div class="glass-card p-12 mb-8">
+                <h3 class="text-lg font-bold mb-6">Expertise & Qualifications</h3>
+                <div class="flex flex-wrap gap-3">
+                    @forelse($driver->categories as $category)
+                        <div class="flex items-center gap-2 p-4 px-6 glass-card border-primary"
+                            style="background: rgba(var(--primary-rgb), 0.05);">
+                            <i data-lucide="shield-check" class="icon-sm text-primary"></i>
+                            <span class="font-bold">{{ $category->name }}</span>
+                        </div>
+                    @empty
+                        <p class="text-muted italic">No specific vehicle qualifications listed.</p>
+                    @endforelse
+                </div>
+            </div>
+
             <div class="glass-card p-12">
                 <h3 class="text-lg font-bold mb-6">Contact Information</h3>
                 <div class="grid" style="grid-template-columns: 1fr 1fr; gap: 2rem;">

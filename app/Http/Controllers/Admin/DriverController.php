@@ -5,19 +5,21 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Driver;
+use App\Models\Category;
 use Illuminate\Support\Facades\Storage;
 
 class DriverController extends Controller
 {
     public function index()
     {
-        $drivers = Driver::all();
+        $drivers = Driver::with('categories')->get();
         return view('admin.drivers.index', compact('drivers'));
     }
 
     public function create()
     {
-        return view('admin.drivers.create');
+        $categories = Category::all();
+        return view('admin.drivers.create', compact('categories'));
     }
 
     public function store(Request $request)
@@ -32,6 +34,8 @@ class DriverController extends Controller
             'status' => 'required|in:Available,On Trip,Off Duty',
             'biography' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ]);
 
         $data = $request->all();
@@ -41,7 +45,11 @@ class DriverController extends Controller
             $data['profile_picture'] = $path;
         }
 
-        Driver::create($data);
+        $driver = Driver::create($data);
+
+        if ($request->has('categories')) {
+            $driver->categories()->sync($request->categories);
+        }
 
         return redirect()->route('admin.drivers.index')->with('success', 'Driver registered successfully.');
     }
@@ -54,8 +62,9 @@ class DriverController extends Controller
 
     public function edit($id)
     {
-        $driver = Driver::findOrFail($id);
-        return view('admin.drivers.edit', compact('driver'));
+        $driver = Driver::with('categories')->findOrFail($id);
+        $categories = Category::all();
+        return view('admin.drivers.edit', compact('driver', 'categories'));
     }
 
     public function update(Request $request, $id)
@@ -72,6 +81,8 @@ class DriverController extends Controller
             'status' => 'required|in:Available,On Trip,Off Duty',
             'biography' => 'nullable|string',
             'profile_picture' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:2048',
+            'categories' => 'nullable|array',
+            'categories.*' => 'exists:categories,id',
         ]);
 
         $data = $request->all();
@@ -85,6 +96,12 @@ class DriverController extends Controller
         }
 
         $driver->update($data);
+
+        if ($request->has('categories')) {
+            $driver->categories()->sync($request->categories);
+        } else {
+            $driver->categories()->detach();
+        }
 
         return redirect()->route('admin.drivers.index')->with('success', 'Driver updated successfully.');
     }

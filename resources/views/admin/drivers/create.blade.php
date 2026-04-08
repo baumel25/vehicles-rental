@@ -79,6 +79,24 @@
                     placeholder="Highlight driver skills, specialties, and language proficiency..."></textarea>
             </div>
 
+            <div class="admin-form-group mt-8">
+                <label class="mb-4 block">Qualified Vehicle Categories</label>
+                <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    @foreach ($categories as $category)
+                        @if (!$category->parent_id)
+                            {{-- Only show main categories for qualification or logic choice --}}
+                            <label
+                                class="flex items-center gap-3 p-4 glass-card cursor-pointer hover:bg-glass-10 transition-colors">
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}" class="w-4 h-4">
+                                <span class="text-sm font-bold">{{ $category->name }}</span>
+                            </label>
+                        @endif
+                    @endforeach
+                </div>
+                <p class="text-xs text-muted mt-4 italic">Select all vehicle types this driver is licensed and qualified to
+                    operate.</p>
+            </div>
+
             <div class="flex gap-4 mt-8 pt-8" style="border-top: 1px solid var(--glass-border);">
                 <a href="{{ route('admin.drivers.index') }}" class="btn btn-outline"
                     style="padding: 1rem 2.5rem;">Discard</a>

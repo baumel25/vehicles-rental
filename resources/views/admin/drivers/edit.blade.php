@@ -84,6 +84,22 @@
                 <textarea name="biography" class="admin-form-control" rows="5">{{ $driver->biography }}</textarea>
             </div>
 
+            <div class="admin-form-group mt-8">
+                <label class="mb-4 block">Update Qualified Categories</label>
+                <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem;">
+                    @foreach ($categories as $category)
+                        @if (!$category->parent_id)
+                            <label
+                                class="flex items-center gap-3 p-4 glass-card cursor-pointer hover:bg-glass-10 transition-colors">
+                                <input type="checkbox" name="categories[]" value="{{ $category->id }}"
+                                    {{ $driver->categories->contains($category->id) ? 'checked' : '' }} class="w-4 h-4">
+                                <span class="text-sm font-bold">{{ $category->name }}</span>
+                            </label>
+                        @endif
+                    @endforeach
+                </div>
+            </div>
+
             <div class="flex gap-4 mt-8 pt-8" style="border-top: 1px solid var(--glass-border);">
                 <a href="{{ route('admin.drivers.index') }}" class="btn btn-outline"
                     style="padding: 1rem 2.5rem;">Cancel</a>
