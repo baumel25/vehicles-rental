@@ -1,12 +1,7 @@
 {
     "build": {
         "builder": "nixpacks",
-        "buildCommand": "composer install --no-dev --optimize-autoloader && php artisan optimize",
-        "nixpacksConfig": {
-            "php": {
-                "version": "8.4"
-            }
-        }
+        "buildCommand": "composer install --no-dev --optimize-autoloader && php artisan optimize"
     },
     "deploy": {
         "startCommand": "php artisan serve --host=0.0.0.0 --port=$PORT",
