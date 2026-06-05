@@ -6,9 +6,18 @@ use App\Http\Controllers\Admin\CategoryController;
 use App\Http\Controllers\Admin\VehicleController;
 use App\Http\Controllers\Admin\DriverController;
 use App\Http\Controllers\Admin\ReservationController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('admin')->group(function () {
+    // Redirect /admin to dashboard or login
+    Route::get('/', function () {
+        if (Auth::guard('admin')->check()) {
+            return redirect()->route('admin.dashboard');
+        }
+        return redirect()->route('admin.login');
+    })->name('admin.index');
+
     // Guest Admin Routes
     Route::get('/login', [AuthController::class, 'login'])->name('admin.login');
     Route::post('/authenticate', [AuthController::class, 'authenticate'])->name('admin.authenticate');

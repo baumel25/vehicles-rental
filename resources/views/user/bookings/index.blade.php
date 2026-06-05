@@ -62,7 +62,7 @@
                                         @endif
                                     </td>
                                     <td><span
-                                            class="font-extrabold text-lg">${{ number_format($booking->total_price, 0) }}</span>
+                                            class="font-extrabold text-lg">{{ number_format($booking->total_price, 0) }} FCFA</span>
                                     </td>
                                     <td>
                                         @php

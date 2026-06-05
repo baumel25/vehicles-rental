@@ -43,7 +43,7 @@
                                 <br><small>{{ $vehicle->subCategory->name }}</small>
                             @endif
                         </td>
-                        <td class="font-bold">${{ number_format($vehicle->daily_rate, 2) }}</td>
+                        <td class="font-bold">{{ number_format($vehicle->daily_rate, 0) }} FCFA</td>
                         <td class="font-bold">{{ $vehicle->quantity }} Units</td>
                         <td>
                             <span class="badge"

@@ -87,7 +87,7 @@
                 <h3 class="text-lg font-bold mb-4">Earnings Multiplier</h3>
                 <p class="text-sm mb-6 opacity-80">Daily base rate for chauffeur services (exclusive of vehicle rental).</p>
                 <div class="flex items-end gap-2">
-                    <span class="text-4xl font-extrabold">${{ number_format($driver->base_rate, 2) }}</span>
+                    <span class="text-4xl font-extrabold">{{ number_format($driver->base_rate, 0) }} FCFA</span>
                     <span class="text-sm font-bold opacity-80 mb-2">/ Day</span>
                 </div>
             </div>

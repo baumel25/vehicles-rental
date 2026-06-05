@@ -50,18 +50,18 @@
                         [
                             'name' => 'BMW M8 Competition',
                             'year' => 2024,
-                            'rate' => '$120',
+                            'rate' => '120 FCFA',
                             'qty' => 3,
                             'status' => 'Available',
                         ],
                         [
                             'name' => 'Mercedes S-Class',
                             'year' => 2023,
-                            'rate' => '$150',
+                            'rate' => '150 FCFA',
                             'qty' => 2,
                             'status' => 'Low Stock',
                         ],
-                        ['name' => 'Audi RS7', 'year' => 2024, 'rate' => '$140', 'qty' => 5, 'status' => 'Available'],
+                        ['name' => 'Audi RS7', 'year' => 2024, 'rate' => '140 FCFA', 'qty' => 5, 'status' => 'Available'],
                     ];
                 @endphp
 

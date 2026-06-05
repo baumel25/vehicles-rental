@@ -89,7 +89,7 @@
                     {{ $reservation->return_date->format('M d, Y') }}</div>
 
                 <div class="label">Total Amount</div>
-                <div class="value">${{ number_format($reservation->total_price, 0) }}</div>
+                <div class="value">{{ number_format($reservation->total_price, 0) }} FCFA</div>
             </div>
 
             <p style="text-align: center;">

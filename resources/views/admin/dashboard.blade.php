@@ -38,7 +38,7 @@
             </div>
             <div>
                 <span class="text-xs text-muted uppercase font-bold" style="display: block;">Revenue</span>
-                <span class="text-2xl font-extrabold">$12,450</span>
+                <span class="text-2xl font-extrabold">12 450 FCFA</span>
             </div>
         </div>
     </div>
@@ -69,28 +69,28 @@
                             'vehicle' => 'BMW M8',
                             'date' => 'Oct 24, 2026',
                             'status' => 'Confirmed',
-                            'total' => '$480.00',
+                            'total' => '480 FCFA',
                         ],
                         [
                             'user' => 'Sarah Connor',
                             'vehicle' => 'Yamaha R1',
                             'date' => 'Oct 23, 2026',
                             'status' => 'Pending',
-                            'total' => '$160.00',
+                            'total' => '160 FCFA',
                         ],
                         [
                             'user' => 'John Wick',
                             'vehicle' => 'Porsche 911',
                             'date' => 'Oct 22, 2026',
                             'status' => 'Completed',
-                            'total' => '$540.00',
+                            'total' => '540 FCFA',
                         ],
                         [
                             'user' => 'Ellen Ripley',
                             'vehicle' => 'G-Wagon',
                             'date' => 'Oct 21, 2026',
                             'status' => 'Cancelled',
-                            'total' => '$750.00',
+                            'total' => '750 FCFA',
                         ],
                     ];
                 @endphp

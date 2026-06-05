@@ -34,7 +34,7 @@
                     </select>
                 </div>
                 <div class="admin-form-group">
-                    <label>Daily Service Rate ($)</label>
+                    <label>Daily Service Rate (FCFA)</label>
                     <input type="number" name="base_rate" class="admin-form-control" placeholder="50.00" step="0.01"
                         required>
                 </div>

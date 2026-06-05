@@ -69,7 +69,7 @@
                     <div class="glass-card" style="padding: 0; overflow: hidden;">
                         <div class="card-img-wrapper">
                             <img src="{{ asset('storage/' . $vehicle->thumbnail) }}" alt="{{ $vehicle->name }}">
-                            <div class="price-tag">${{ number_format($vehicle->daily_rate, 0) }} / day</div>
+                            <div class="price-tag">{{ number_format($vehicle->daily_rate, 0) }} FCFA / jour</div>
 
                             <div
                                 style="position: absolute; top: 1rem; right: 1rem; background: var(--primary); padding: 0.3rem 0.7rem; border-radius: 8px; font-size: 0.7rem; font-weight: 700;">

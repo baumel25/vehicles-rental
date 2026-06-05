@@ -80,8 +80,8 @@
                 <div class="sidebar">
                     <div class="mb-8">
                         <span class="font-extrabold"
-                            style="font-size: 2.5rem;">${{ number_format($vehicle->daily_rate, 0) }}</span>
-                        <span class="text-muted font-bold"> / day</span>
+                            style="font-size: 2.5rem;">{{ number_format($vehicle->daily_rate, 0) }}</span>
+                        <span class="text-muted font-bold"> FCFA / jour</span>
                     </div>
 
                     <form class="booking-form" action="{{ route('bookings.store') }}" method="POST" id="bookingForm">
@@ -158,7 +158,7 @@
                                                     <div class="text-sm font-bold">{{ $driver->name }}</div>
                                                     <div class="text-[10px] text-muted">{{ $driver->experience_years }}
                                                         Yrs |
-                                                        ${{ number_format($driver->base_rate, 0) }}/day</div>
+                                                        {{ number_format($driver->base_rate, 0) }} FCFA/jour</div>
                                                 </div>
                                                 <button type="button" class="btn-info"
                                                     onclick="showDriverInfo('{{ $driver->name }}', '{{ $driver->profile_picture ? asset('storage/' . $driver->profile_picture) : '' }}', '{{ $driver->biography }}', '{{ $driver->experience_years }}')"
@@ -194,15 +194,15 @@
                         <div class="price-summary">
                             <div class="summary-row">
                                 <span class="text-muted">Rental Rate</span>
-                                <span id="basePrice">$0.00</span>
+                                <span id="basePrice">0 FCFA</span>
                             </div>
                             <div class="summary-row" id="driverFeeRow" style="display: none;">
                                 <span class="text-muted">Driver Service</span>
-                                <span id="driverPrice">$0.00</span>
+                                <span id="driverPrice">0 FCFA</span>
                             </div>
                             <div class="summary-row summary-total">
                                 <span>Total Price</span>
-                                <span id="totalPrice">$0.00</span>
+                                <span id="totalPrice">0 FCFA</span>
                             </div>
                         </div>
 
@@ -337,13 +337,13 @@
                         }
                     }
 
-                    basePriceEl.innerText = `$${baseTotal.toLocaleString()}`;
-                    driverPriceEl.innerText = `$${driverTotal.toLocaleString()}`;
-                    totalPriceEl.innerText = `$${(baseTotal + driverTotal).toLocaleString()}`;
+                    basePriceEl.innerText = `${baseTotal.toLocaleString()} FCFA`;
+                    driverPriceEl.innerText = `${driverTotal.toLocaleString()} FCFA`;
+                    totalPriceEl.innerText = `${(baseTotal + driverTotal).toLocaleString()} FCFA`;
                 } else {
-                    basePriceEl.innerText = `$0.00`;
-                    driverPriceEl.innerText = `$0.00`;
-                    totalPriceEl.innerText = `$0.00`;
+                    basePriceEl.innerText = `0 FCFA`;
+                    driverPriceEl.innerText = `0 FCFA`;
+                    totalPriceEl.innerText = `0 FCFA`;
                 }
             }
 
@@ -413,7 +413,7 @@
                 }
 
                 // Update Modal values
-                modalVehiclePrice.innerText = `$${dailyRate.toLocaleString()}`;
+                modalVehiclePrice.innerText = `${dailyRate.toLocaleString()} FCFA`;
 
                 let deposit = dailyRate;
                 if (driverToggle && driverToggle.checked) {
@@ -423,14 +423,14 @@
                         return;
                     }
                     const rate = parseFloat(selectedDriver.dataset.rate);
-                    modalDriverPrice.innerText = `$${rate.toLocaleString()}`;
+                    modalDriverPrice.innerText = `${rate.toLocaleString()} FCFA`;
                     modalDriverRow.style.display = 'flex';
                     deposit += rate;
                 } else {
                     modalDriverRow.style.display = 'none';
                 }
 
-                modalTotalDeposit.innerText = `$${deposit.toLocaleString()}`;
+                modalTotalDeposit.innerText = `${deposit.toLocaleString()} FCFA`;
 
                 paymentModal.classList.add('active');
                 paymentOverlay.classList.add('active');

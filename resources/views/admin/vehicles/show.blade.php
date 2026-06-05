@@ -17,7 +17,7 @@
                 </span>
                 <h1 class="text-2xl font-extrabold" style="font-size: 3rem;">{{ $vehicle->name }}</h1>
                 <p class="text-lg text-muted mt-2">Registered in {{ $vehicle->model_year }} | Daily Rate: <span
-                        class="text-primary font-bold">${{ number_format($vehicle->daily_rate, 2) }}</span></p>
+                        class="text-primary font-bold">{{ number_format($vehicle->daily_rate, 0) }} FCFA</span></p>
             </div>
             <div class="flex gap-4">
                 <a href="{{ route('admin.vehicles.edit', $vehicle->id) }}" class="btn btn-outline"

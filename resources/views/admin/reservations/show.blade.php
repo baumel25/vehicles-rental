@@ -82,7 +82,7 @@
                     <div>
                         <span class="text-xs font-bold text-muted uppercase block mb-2">Total Amount</span>
                         <div class="text-3xl font-extrabold text-primary">
-                            ${{ number_format($reservation->total_price, 0) }}</div>
+                            {{ number_format($reservation->total_price, 0) }} FCFA</div>
                     </div>
                 </div>
 
@@ -109,7 +109,7 @@
                         style="width: 100%; height: 120px; border-radius: 12px; object-fit: cover; margin-bottom: 1rem;">
                     <div class="font-bold">{{ $reservation->vehicle->name }}</div>
                     <div class="text-xs text-muted">{{ $reservation->vehicle->category->name }} |
-                        ${{ number_format($reservation->vehicle->daily_rate, 0) }}/day</div>
+                        {{ number_format($reservation->vehicle->daily_rate, 0) }} FCFA/jour</div>
                 </div>
                 <div class="glass-card">
                     <h3 class="text-sm font-bold text-muted uppercase mb-6">Chauffeur Service</h3>

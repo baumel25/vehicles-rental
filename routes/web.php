@@ -3,6 +3,7 @@
 use App\Http\Controllers\BookingController;
 use App\Http\Controllers\DriverController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\UserAuthController;
 use App\Http\Controllers\VehicleController;
 
@@ -33,7 +34,7 @@ Route::middleware('auth')->group(function () {
 });
 
 // Callback (Outside auth if needed, but here we can protect or use exclusion)
-Route::post('/payments/callback', [App\Http\Controllers\PaymentController::class, 'callback'])->name('payments.callback');
+Route::post('/payments/callback', [PaymentController::class, 'callback'])->name('payments.callback');
 
 Route::get('/about', function () {
     return view('about');

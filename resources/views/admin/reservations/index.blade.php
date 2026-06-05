@@ -42,13 +42,13 @@
                                 <div class="font-bold text-sm">{{ $reservation->user->name }}</div>
                                 <div class="text-xs text-muted">{{ $reservation->user->email }}</div>
                             </td>
-                            <td>
-                                <div class="flex items-center gap-2">
-                                    <img src="{{ asset('storage/' . $reservation->vehicle->thumbnail) }}"
-                                        style="width: 40px; height: 30px; border-radius: 4px; object-fit: cover;">
-                                    <div class="text-xs font-bold">{{ $reservation->vehicle->name }}</div>
-                                </div>
-                            </td>
+                          <td>
+    @if($reservation->vehicle && $reservation->vehicle->thumbnail)
+        <img src="{{ $reservation->vehicle->thumbnail }}" width="50" alt="Vehicle">
+    @else
+        <img src="{{ asset('images/default-vehicle.png') }}" width="50" alt="No image">
+    @endif
+</td>
                             <td>
                                 @if ($reservation->driver)
                                     <span class="badge text-xs"

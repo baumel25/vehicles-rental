@@ -19,7 +19,7 @@
                 <i data-lucide="image" class="mx-auto mb-4 text-muted" style="width: 48px; height: 48px;"></i>
                 <h4 class="text-sm font-bold mb-4">Main Thumbnail</h4>
                 <div class="admin-form-group">
-                    <input type="file" name="thumbnail" class="admin-form-control" required>
+                    <input type="file" name="thumbnail" class="admin-form-control">
                 </div>
             </div>
 
@@ -38,7 +38,7 @@
                     <input type="number" name="quantity" class="admin-form-control" value="1" min="1" required>
                 </div>
                 <div class="admin-form-group">
-                    <label>Daily Rental Rate ($)</label>
+                    <label>Daily Rental Rate (FCFA)</label>
                     <input type="number" name="daily_rate" class="admin-form-control" placeholder="100.00" step="0.01"
                         required>
                 </div>

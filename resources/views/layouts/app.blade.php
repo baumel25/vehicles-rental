@@ -131,11 +131,11 @@
                         journey, our passion.
                     </p>
                     <div class="social-links">
-                        <a href="#" class="social-icon"><i data-lucide="instagram"
+                        <a href="#" class="social-icon"><i data-lucide="camera"
                                 style="width: 18px; height: 18px;"></i></a>
-                        <a href="#" class="social-icon"><i data-lucide="twitter"
+                        <a href="#" class="social-icon"><i data-lucide="message-circle"
                                 style="width: 18px; height: 18px;"></i></a>
-                        <a href="#" class="social-icon"><i data-lucide="facebook"
+                        <a href="#" class="social-icon"><i data-lucide="globe"
                                 style="width: 18px; height: 18px;"></i></a>
                     </div>
                 </div>

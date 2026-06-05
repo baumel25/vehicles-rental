@@ -83,7 +83,7 @@
 
                         <div class="mb-8 p-4" style="background: rgba(255,255,255,0.03); border-radius: 12px;">
                             <span class="text-muted text-xs uppercase font-bold">Daily Rate</span>
-                            <div class="text-2xl font-extrabold">${{ number_format($driver->base_rate, 0) }}</div>
+                            <div class="text-2xl font-extrabold">{{ number_format($driver->base_rate, 0) }} FCFA</div>
                         </div>
 
                         <a href="{{ route('vehicles.index') }}" class="btn btn-primary full-width">Rent with

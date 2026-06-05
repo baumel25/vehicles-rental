@@ -41,7 +41,7 @@
                     </select>
                 </div>
                 <div class="admin-form-group">
-                    <label>Daily Service Rate ($)</label>
+                    <label>Daily Service Rate (FCFA)</label>
                     <input type="number" name="base_rate" class="admin-form-control" value="{{ $driver->base_rate }}"
                         step="0.01" required>
                 </div>

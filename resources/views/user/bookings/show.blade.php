@@ -64,20 +64,20 @@
                                 <div class="space-y-4">
                                     <div class="flex justify-between text-sm">
                                         <span class="text-muted">Vehicle Rental</span>
-                                        <span class="font-bold">${{ number_format($booking->vehicle->daily_rate, 0) }} /
+                                        <span class="font-bold">{{ number_format($booking->vehicle->daily_rate, 0) }} FCFA /
                                             day</span>
                                     </div>
                                     @if ($booking->driver)
                                         <div class="flex justify-between text-sm">
                                             <span class="text-muted">Chauffeur Service</span>
-                                            <span class="font-bold">${{ number_format($booking->driver->base_rate, 0) }} /
+                                            <span class="font-bold">{{ number_format($booking->driver->base_rate, 0) }} FCFA /
                                                 day</span>
                                         </div>
                                     @endif
                                     <div class="flex justify-between text-lg font-extrabold pt-4"
                                         style="border-top: 1px solid var(--glass-border);">
                                         <span>Total Paid</span>
-                                        <span class="text-primary">${{ number_format($booking->total_price, 0) }}</span>
+                                        <span class="text-primary">{{ number_format($booking->total_price, 0) }} FCFA</span>
                                     </div>
                                 </div>
                             </div>

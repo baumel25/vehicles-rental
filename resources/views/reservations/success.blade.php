@@ -36,7 +36,7 @@
                     </div>
                     <div class="summary-total flex justify-between pt-6">
                         <span class="text-xl-bold">Total Paid</span>
-                        <span class="text-xl-bold">$480.00</span>
+                        <span class="text-xl-bold">480 FCFA</span>
                     </div>
                 </div>
             </div>

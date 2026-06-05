@@ -61,7 +61,7 @@
                         min="0" required>
                 </div>
                 <div class="admin-form-group">
-                    <label>Daily Rental Rate ($)</label>
+                    <label>Daily Rental Rate (FCFA)</label>
                     <input type="number" name="daily_rate" class="admin-form-control" value="{{ $vehicle->daily_rate }}"
                         step="0.01" required>
                 </div>

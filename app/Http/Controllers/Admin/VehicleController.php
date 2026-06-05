@@ -38,7 +38,7 @@ class VehicleController extends Controller
             'fuel_type' => 'nullable|string',
             'transmission' => 'nullable|string',
             'seating_capacity' => 'nullable|integer',
-            'thumbnail' => 'required|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
+            'thumbnail' => 'nullable|image|mimes:jpeg,png,jpg,gif,svg|max:4096',
             'images.*' => 'image|mimes:jpeg,png,jpg,gif,svg|max:4096',
         ]);
 
