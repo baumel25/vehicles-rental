@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Driver;
 use App\Models\Vehicle;
 use Illuminate\Database\Seeder;
+use Illuminate\Support\Str;
 
 class SampleDataSeeder extends Seeder
 {
@@ -33,6 +34,7 @@ class SampleDataSeeder extends Seeder
         Vehicle::firstOrCreate(
             ['name' => 'Mercedes-Benz G-Class'],
             [
+                'slug' => Str::slug('Mercedes-Benz G-Class'),
                 'model_year' => 2025,
                 'category_id' => $suv->id,
                 'daily_rate' => 150.00,
@@ -47,6 +49,7 @@ class SampleDataSeeder extends Seeder
         Vehicle::firstOrCreate(
             ['name' => 'BMW 7 Series'],
             [
+                'slug' => Str::slug('BMW 7 Series'),
                 'model_year' => 2025,
                 'category_id' => $sedan->id,
                 'daily_rate' => 120.00,
@@ -61,6 +64,7 @@ class SampleDataSeeder extends Seeder
         Vehicle::firstOrCreate(
             ['name' => 'Porsche 911 Carrera'],
             [
+                'slug' => Str::slug('Porsche 911 Carrera'),
                 'model_year' => 2025,
                 'category_id' => $sports->id,
                 'daily_rate' => 250.00,
@@ -75,6 +79,7 @@ class SampleDataSeeder extends Seeder
         Vehicle::firstOrCreate(
             ['name' => 'Range Rover Velar'],
             [
+                'slug' => Str::slug('Range Rover Velar'),
                 'model_year' => 2025,
                 'category_id' => $suv->id,
                 'daily_rate' => 180.00,
@@ -89,6 +94,7 @@ class SampleDataSeeder extends Seeder
         Vehicle::firstOrCreate(
             ['name' => 'Yamaha YZF-R1'],
             [
+                'slug' => Str::slug('Yamaha YZF-R1'),
                 'model_year' => 2025,
                 'category_id' => $motorcycle->id,
                 'daily_rate' => 80.00,
