@@ -33,6 +33,10 @@
                                 @if ($vehicle->thumbnail)
                                     <img src="{{ asset('storage/' . $vehicle->thumbnail) }}"
                                         style="width: 40px; height: 40px; object-fit: cover; border-radius: 8px;">
+                                @else
+                                    <div style="width: 40px; height: 40px; border-radius: 8px; background: var(--bg-card); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border);">
+                                        <i data-lucide="car" style="width: 18px; height: 18px; color: var(--text-muted);"></i>
+                                    </div>
                                 @endif
                                 {{ $vehicle->name }}
                             </div>

@@ -44,6 +44,11 @@
                     @if ($vehicle->thumbnail)
                         <img src="{{ asset('storage/' . $vehicle->thumbnail) }}"
                             style="width: 100%; border-radius: 20px; box-shadow: 0 20px 40px rgba(0,0,0,0.3);">
+                    @else
+                        <div style="width: 100%; aspect-ratio: 16/9; border-radius: 20px; background: var(--bg-card); display: flex; flex-direction: column; align-items: center; justify-content: center; border: 2px dashed var(--border); gap: 1rem;">
+                            <i data-lucide="image-off" style="width: 48px; height: 48px; color: var(--text-muted);"></i>
+                            <p class="text-muted font-bold">No image uploaded yet</p>
+                        </div>
                     @endif
                 </div>
                 <div class="grid" style="grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 1.5rem;">

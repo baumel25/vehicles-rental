@@ -24,6 +24,10 @@
                         <img src="{{ asset('storage/' . $vehicle->thumbnail) }}"
                             style="width: 100%; height: 200px; object-fit: cover; border-radius: 12px; border: 1px solid var(--glass-border);">
                     </div>
+                @else
+                    <div class="mb-4" style="width: 100%; height: 200px; border-radius: 12px; background: var(--bg-card); display: flex; align-items: center; justify-content: center; border: 1px dashed var(--border);">
+                        <i data-lucide="image-off" style="width: 32px; height: 32px; color: var(--text-muted);"></i>
+                    </div>
                 @endif
                 <div class="admin-form-group">
                     <input type="file" name="thumbnail" class="admin-form-control">
