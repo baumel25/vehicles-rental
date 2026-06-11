@@ -14,10 +14,12 @@ class AdminSeeder extends Seeder
      */
     public function run(): void
     {
-        Admin::create([
-            'name' => 'System Administrator',
-            'email' => 'admin@luxdrive.com',
-            'password' => Hash::make('password'),
-        ]);
+        Admin::firstOrCreate(
+            ['email' => 'admin@luxdrive.com'],
+            [
+                'name' => 'System Administrator',
+                'password' => Hash::make('password'),
+            ]
+        );
     }
 }
