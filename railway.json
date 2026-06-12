@@ -7,6 +7,12 @@
         "startCommand": "php artisan serve --host=0.0.0.0 --port=$PORT",
         "healthcheckPath": "/",
         "healthcheckTimeout": 100,
-        "restartPolicyType": "always"
+        "restartPolicyType": "always",
+        "volumeMounts": [
+            {
+                "name": "storage-volume",
+                "mountPath": "/app/storage/app/public"
+            }
+        ]
     }
 }
